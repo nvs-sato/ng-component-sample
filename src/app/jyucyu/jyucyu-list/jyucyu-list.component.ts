@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   CellClickedEvent,
   ColDef,
@@ -8,6 +9,7 @@ import {
   GridReadyEvent,
   ICellRendererParams,
   MenuItemDef,
+  RowDoubleClickedEvent,
   SideBarDef
 } from 'ag-grid-community';
 import {
@@ -32,6 +34,8 @@ export class JyucyuListComponent implements OnInit {
   isLoading = true;
   private gridApi: GridApi<SalesRow> | null = null;
   private selectionMode: 'range' | 'row' = 'range';
+
+  constructor(private readonly router: Router) {}
 
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
@@ -241,6 +245,20 @@ export class JyucyuListComponent implements OnInit {
 
   onGridReady(event: GridReadyEvent<SalesRow>): void {
     this.gridApi = event.api;
+  }
+
+  // 受注行のダブルクリック時に、対象データを確認用にコンソールへ出力
+  onRowDoubleClicked(event: RowDoubleClickedEvent<SalesRow>): void {
+    if (!event.data) {
+      return;
+    }
+
+    console.log('[受注ダブルクリック]', event.data);
+  }
+
+  // 新規ボタン押下時に受注登録画面へ遷移
+  moveToRegister(): void {
+    this.router.navigate(['/jyucyu/register']);
   }
 
   exportAsExcelTable(): void {
