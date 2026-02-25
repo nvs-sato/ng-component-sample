@@ -1,5 +1,4 @@
 ﻿.page {
-  max-width: 1100px;
   margin: 24px auto;
   padding: 0 16px;
 }
@@ -68,46 +67,11 @@ p {
   color: #c5221f;
 }
 
-.popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 1000;
+.modal-header {
+  margin-bottom: 12px;
 }
 
-.popup {
-  width: min(720px, 100%);
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
-  padding: 20px;
-}
-
-.popup-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.popup-header h2 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.close-btn {
-  border: 1px solid #cbd5e1;
-  background: #fff;
-  border-radius: 8px;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-
-.popup-grid {
+.detail-grid {
   display: grid;
   grid-template-columns: 160px 1fr;
   row-gap: 8px;
@@ -115,13 +79,13 @@ p {
   margin: 0;
 }
 
-.popup-grid dt {
+.detail-grid dt {
   margin: 0;
   color: #475569;
   font-weight: 600;
 }
 
-.popup-grid dd {
+.detail-grid dd {
   margin: 0;
   color: #111827;
 }

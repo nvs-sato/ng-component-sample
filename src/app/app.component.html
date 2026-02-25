@@ -1,1 +1,21 @@
-﻿<router-outlet></router-outlet>
+﻿<div class="drawer lg:drawer-open app-shell">
+  <input id="app-drawer" type="checkbox" class="drawer-toggle" />
+
+  <div class="drawer-content">
+    <div class="topbar">
+      <label for="app-drawer" class="btn btn-sm drawer-button lg:hidden">メニュー</label>
+      <h1 class="title">受注管理</h1>
+    </div>
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <div class="drawer-side">
+    <label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-72 min-h-full bg-base-200 text-base-content">
+      <li><a routerLink="/jyucyu/register" routerLinkActive="active">受注登録</a></li>
+      <li><a routerLink="/jyucyu/list" routerLinkActive="active">受注一覧</a></li>
+    </ul>
+  </div>
+</div>
