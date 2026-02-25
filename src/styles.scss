@@ -1,5 +1,6 @@
-﻿@import "tailwindcss";
-@plugin "daisyui";
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import 'ag-grid-community/styles/ag-grid.css';
 @import 'ag-grid-community/styles/ag-theme-balham.css';
