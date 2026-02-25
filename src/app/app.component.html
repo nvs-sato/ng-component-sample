@@ -6,6 +6,16 @@
       <label for="app-drawer" class="btn btn-sm drawer-button lg:hidden">メニュー</label>
       <h1 class="title">受注管理</h1>
     </div>
+    <div class="px-4 pt-3">
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li *ngFor="let crumb of breadcrumbs; let isLast = last">
+            <a *ngIf="!isLast" [routerLink]="crumb.url">{{ crumb.label }}</a>
+            <span *ngIf="isLast">{{ crumb.label }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
     <main class="content">
       <router-outlet></router-outlet>
     </main>
