@@ -12,5 +12,32 @@
     [detailCellRendererParams]="detailCellRendererParams"
     [isRowMaster]="isRowMaster"
     [enableRangeSelection]="true"
+    (cellClicked)="onCellClicked($event)"
   ></ag-grid-angular>
+</div>
+
+<div
+  *ngIf="selectedCustomerDetail"
+  class="popup-overlay"
+  (click)="closeCustomerPopup()"
+>
+  <section class="popup" (click)="$event.stopPropagation()">
+    <header class="popup-header">
+      <h2>取引先詳細</h2>
+      <button type="button" class="close-btn" (click)="closeCustomerPopup()">閉じる</button>
+    </header>
+
+    <dl class="popup-grid">
+      <dt>取引先コード</dt><dd>{{ selectedCustomerDetail.customerCode }}</dd>
+      <dt>取引先名</dt><dd>{{ selectedCustomerDetail.customerName }}</dd>
+      <dt>インボイス登録番号</dt><dd>{{ selectedCustomerDetail.invoiceRegistrationNumber }}</dd>
+      <dt>郵便番号</dt><dd>{{ selectedCustomerDetail.postalCode }}</dd>
+      <dt>住所</dt><dd>{{ selectedCustomerDetail.address }}</dd>
+      <dt>担当者名</dt><dd>{{ selectedCustomerDetail.contactPerson }}</dd>
+      <dt>タグ</dt><dd>{{ selectedCustomerDetail.tags }}</dd>
+      <dt>メールアドレス</dt><dd>{{ selectedCustomerDetail.email }}</dd>
+      <dt>取引形態</dt><dd>{{ selectedCustomerDetail.tradingType }}</dd>
+      <dt>消費税計上</dt><dd>{{ selectedCustomerDetail.taxPosting }}</dd>
+    </dl>
+  </section>
 </div>
