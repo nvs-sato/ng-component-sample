@@ -13,7 +13,7 @@ import {
   SideBarDef
 } from 'ag-grid-community';
 import {
-  CustomerDetail,
+  Torihikisaki,
   OrderDetailRow,
   OrderStatus,
   SalesRow,
@@ -28,7 +28,7 @@ import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
 })
 export class JyucyuListComponent implements OnInit {
   // 取引先セルクリック時に表示するポップアップの選択状態
-  selectedCustomerDetail: CustomerDetail | null = null;
+  selectedTorihikisaki: Torihikisaki | null = null;
 
   // データロード中の表示制御
   isLoading = true;
@@ -279,11 +279,11 @@ export class JyucyuListComponent implements OnInit {
       return;
     }
 
-    this.selectedCustomerDetail = event.data.customerDetail;
+    this.selectedTorihikisaki = event.data.torihikisaki;
   }
 
   closeCustomerPopup(): void {
-    this.selectedCustomerDetail = null;
+    this.selectedTorihikisaki = null;
   }
 
   // コンテキストメニューから選択モードを切り替える
@@ -360,3 +360,4 @@ export class JyucyuListComponent implements OnInit {
     return `<span class="${classMap[status]}">${status}</span>`;
   }
 }
+

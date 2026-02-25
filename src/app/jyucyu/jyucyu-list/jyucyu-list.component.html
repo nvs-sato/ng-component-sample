@@ -38,22 +38,22 @@
   ></ag-grid-angular>
 </div>
 
-<div *ngIf="selectedCustomerDetail" class="modal modal-open">
+<div *ngIf="selectedTorihikisaki" class="modal modal-open">
   <div class="modal-box max-w-3xl">
     <div class="modal-header">
       <h3 class="font-bold text-lg">取引先詳細</h3>
     </div>
     <dl class="detail-grid">
-      <dt>取引先コード</dt><dd>{{ selectedCustomerDetail.customerCode }}</dd>
-      <dt>取引先名</dt><dd>{{ selectedCustomerDetail.customerName }}</dd>
-      <dt>インボイス登録番号</dt><dd>{{ selectedCustomerDetail.invoiceRegistrationNumber }}</dd>
-      <dt>郵便番号</dt><dd>{{ selectedCustomerDetail.postalCode }}</dd>
-      <dt>住所</dt><dd>{{ selectedCustomerDetail.address }}</dd>
-      <dt>担当者名</dt><dd>{{ selectedCustomerDetail.contactPerson }}</dd>
-      <dt>タグ</dt><dd>{{ selectedCustomerDetail.tags }}</dd>
-      <dt>メールアドレス</dt><dd>{{ selectedCustomerDetail.email }}</dd>
-      <dt>取引形態</dt><dd>{{ selectedCustomerDetail.tradingType }}</dd>
-      <dt>消費税計上</dt><dd>{{ selectedCustomerDetail.taxPosting }}</dd>
+      <dt>取引先コード</dt><dd>{{ selectedTorihikisaki.torihikisakiCd }}</dd>
+      <dt>取引先名</dt><dd>{{ selectedTorihikisaki.torihikisakiMei }}</dd>
+      <dt>インボイス登録番号</dt><dd>{{ selectedTorihikisaki.invoiceRegistrationNumber }}</dd>
+      <dt>郵便番号</dt><dd>{{ selectedTorihikisaki.postalCode }}</dd>
+      <dt>住所</dt><dd>{{ selectedTorihikisaki.address }}</dd>
+      <dt>担当者名</dt><dd>{{ selectedTorihikisaki.tanto }}</dd>
+      <dt>タグ</dt><dd>{{ selectedTorihikisaki.tags }}</dd>
+      <dt>メールアドレス</dt><dd>{{ selectedTorihikisaki.email }}</dd>
+      <dt>取引形態</dt><dd>{{ selectedTorihikisaki.torihikiKeitai }}</dd>
+      <dt>消費税計上</dt><dd>{{ selectedTorihikisaki.utizeiSotozei }}</dd>
     </dl>
     <div class="modal-action">
       <button type="button" class="btn" (click)="closeCustomerPopup()">閉じる</button>
@@ -63,5 +63,6 @@
     <button type="button">close</button>
   </form>
 </div>
+
 
 

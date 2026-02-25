@@ -4,17 +4,17 @@ export type TradingType = '掛売上' | '都度請求' | '現金売上';
 export type TaxPosting = '明細' | '伝票' | '一括';
 export type TaxType = '内税' | '外税';
 
-export interface CustomerDetail {
-  customerCode: string;
-  customerName: string;
+export interface Torihikisaki {
+  torihikisakiCd: string;
+  torihikisakiMei: string;
   invoiceRegistrationNumber: string;
   postalCode: string;
   address: string;
-  contactPerson: string;
+  tanto: string;
   tags: string;
   email: string;
-  tradingType: TradingType;
-  taxPosting: TaxPosting;
+  torihikiKeitai: TradingType;
+  utizeiSotozei: TaxPosting;
 }
 
 export interface OrderDetailRow {
@@ -42,7 +42,7 @@ export interface SalesRow {
   torihikiKeitai: TradingType;
   utizeiSotozei: TaxType;
   details: OrderDetailRow[];
-  customerDetail: CustomerDetail;
+  torihikisaki: Torihikisaki;
 }
 
 // サーバーAPI呼び出しを模したサンプル取得関数（短い遅延あり）
@@ -127,11 +127,11 @@ function createOrder(
     torihikiKeitai: tradingTypeList[(seq - 1) % 3],
     utizeiSotozei: taxTypeList[(seq - 1) % 2],
     details: createOrderDetails(orderId, totalAmount),
-    customerDetail: createCustomerDetail(customer, seq)
+    torihikisaki: createTorihikisaki(customer, seq)
   };
 }
 
-function createCustomerDetail(customerName: string, seq: number): CustomerDetail {
+function createTorihikisaki(customerName: string, seq: number): Torihikisaki {
   const tradingTypeList: TradingType[] = ['掛売上', '都度請求', '現金売上'];
   const taxPostingList: TaxPosting[] = ['明細', '伝票', '一括'];
   const idx = (seq - 1) % 3;
@@ -139,16 +139,16 @@ function createCustomerDetail(customerName: string, seq: number): CustomerDetail
   const zipTail = 1 + seq;
 
   return {
-    customerCode: `CUST-${seq.toString().padStart(4, '0')}`,
-    customerName,
+    torihikisakiCd: `CUST-${seq.toString().padStart(4, '0')}`,
+    torihikisakiMei: customerName,
     invoiceRegistrationNumber: `T${(1000000000000 + seq).toString()}`,
     postalCode: `${zipHead}-${zipTail.toString().padStart(4, '0')}`,
     address: `東京都千代田区丸の内${seq}-1-${(seq % 9) + 1}`,
-    contactPerson: `担当 太郎 ${seq}`,
+    tanto: `担当 太郎 ${seq}`,
     tags: seq % 2 === 0 ? '優良, 関東, 法人' : '新規, 法人',
     email: `sales${seq}@example.co.jp`,
-    tradingType: tradingTypeList[idx],
-    taxPosting: taxPostingList[idx]
+    torihikiKeitai: tradingTypeList[idx],
+    utizeiSotozei: taxPostingList[idx]
   };
 }
 
@@ -190,4 +190,3 @@ function createOrderDetails(orderId: string, totalAmount: number): OrderDetailRo
     }
   ];
 }
-
