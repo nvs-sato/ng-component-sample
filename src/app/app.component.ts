@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import {
   CellClickedEvent,
   ColDef,
@@ -7,11 +7,11 @@ import {
   MenuItemDef
 } from 'ag-grid-community';
 import {
-  createSalesRows,
   CustomerDetail,
   OrderDetailRow,
   OrderStatus,
-  SalesRow
+  SalesRow,
+  fetchSalesRows
 } from './sample-data';
 
 @Component({
@@ -19,9 +19,12 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   // 取引先セルクリック時に表示するポップアップの選択状態
   selectedCustomerDetail: CustomerDetail | null = null;
+
+  // データロード中の表示制御
+  isLoading = true;
 
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
@@ -56,8 +59,8 @@ export class AppComponent {
     }
   ];
 
-  // サンプルデータは専用モジュールから生成
-  readonly rowData: SalesRow[] = createSalesRows();
+  // 初期表示では空配列にして、非同期取得後に反映する
+  rowData: SalesRow[] = [];
 
   // 親グリッド共通の列設定
   readonly defaultColDef: ColDef<SalesRow> = {
@@ -124,6 +127,12 @@ export class AppComponent {
 
     return ['copy', 'copyWithHeaders', 'separator', ...defaultItems];
   };
+
+  async ngOnInit(): Promise<void> {
+    // サーバー取得を模した非同期読み込み
+    this.rowData = await fetchSalesRows(1500);
+    this.isLoading = false;
+  }
 
   // 取引先列クリック時に取引先詳細ポップアップを開く
   onCellClicked(event: CellClickedEvent<SalesRow>): void {

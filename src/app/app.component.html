@@ -2,6 +2,8 @@
   <h1>AG Grid サンプル（日本仕様）</h1>
   <p>受注明細は行を展開して確認できます（受注日列の左側アイコン）。</p>
 
+  <p *ngIf="isLoading" class="loading-text">データを読み込み中です...</p>
+
   <ag-grid-angular
     class="ag-theme-quartz grid"
     [columnDefs]="columnDefs"

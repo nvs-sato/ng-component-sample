@@ -36,7 +36,19 @@ export interface SalesRow {
   customerDetail: CustomerDetail;
 }
 
-export function createSalesRows(): SalesRow[] {
+// サーバーAPI呼び出しを模したサンプル取得関数（短い遅延あり）
+export async function fetchSalesRows(delayMs = 450): Promise<SalesRow[]> {
+  await wait(delayMs);
+  return createSalesRows();
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function createSalesRows(): SalesRow[] {
   return [
     createOrder('2026-02-01', 'J-2026-001', '株式会社 山田商事', 294000, '受注', 1),
     createOrder('2026-02-02', 'J-2026-002', '田中工業株式会社', 543200, '一部出荷', 2),
