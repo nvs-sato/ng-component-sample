@@ -1,4 +1,4 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+﻿import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ModuleRegistry } from 'ag-grid-community';
 import {
   ClipboardModule,
@@ -21,3 +21,4 @@ ModuleRegistry.registerModules([
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch((err) => console.error(err));
+

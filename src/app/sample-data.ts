@@ -2,6 +2,7 @@
 export type DetailType = '通常' | '値引' | '送料' | '調整';
 export type TradingType = '掛売上' | '都度請求' | '現金売上';
 export type TaxPosting = '明細' | '伝票' | '一括';
+export type TaxType = '内税' | '外税';
 
 export interface CustomerDetail {
   customerCode: string;
@@ -27,11 +28,19 @@ export interface OrderDetailRow {
 }
 
 export interface SalesRow {
-  orderDate: string;
-  orderId: string;
+  jyucyuDate: string;
+  jyucyuNo: string;
+  customerCode: string;
   customer: string;
-  totalAmount: number;
-  status: OrderStatus;
+  shipToCode: string;
+  shipToName: string;
+  summary: string;
+  jyucyuKingakuGokei: number;
+  ararieki: number;
+  arariekiRitsu: number;
+  jyucyuJyokyo: OrderStatus;
+  torihikiKeitai: TradingType;
+  utizeiSotozei: TaxType;
   details: OrderDetailRow[];
   customerDetail: CustomerDetail;
 }
@@ -81,12 +90,26 @@ function createOrder(
   status: OrderStatus,
   seq: number
 ): SalesRow {
+  // 粗利益と粗利益率はサンプル用に一定ルールで計算
+  const grossProfit = Math.round(totalAmount * (0.18 + (seq % 5) * 0.02));
+  const grossProfitRate = Number(((grossProfit / totalAmount) * 100).toFixed(1));
+  const tradingTypeList: TradingType[] = ['掛売上', '都度請求', '現金売上'];
+  const taxTypeList: TaxType[] = ['外税', '内税'];
+
   return {
-    orderDate,
-    orderId,
+    jyucyuDate: orderDate,
+    jyucyuNo: orderId,
+    customerCode: `CUST-${seq.toString().padStart(4, '0')}`,
     customer,
-    totalAmount,
-    status,
+    shipToCode: `SHIP-${seq.toString().padStart(4, '0')}`,
+    shipToName: `${customer} 納品センター`,
+    summary: seq % 2 === 0 ? '定期補充分' : '新規案件分',
+    jyucyuKingakuGokei: totalAmount,
+    ararieki: grossProfit,
+    arariekiRitsu: grossProfitRate,
+    jyucyuJyokyo: status,
+    torihikiKeitai: tradingTypeList[(seq - 1) % 3],
+    utizeiSotozei: taxTypeList[(seq - 1) % 2],
     details: createOrderDetails(orderId, totalAmount),
     customerDetail: createCustomerDetail(customer, seq)
   };
@@ -151,3 +174,4 @@ function createOrderDetails(orderId: string, totalAmount: number): OrderDetailRo
     }
   ];
 }
+

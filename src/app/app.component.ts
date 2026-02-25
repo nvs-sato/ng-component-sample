@@ -7,7 +7,8 @@ import {
   GridApi,
   GridReadyEvent,
   ICellRendererParams,
-  MenuItemDef
+  MenuItemDef,
+  SideBarDef
 } from 'ag-grid-community';
 import {
   CustomerDetail,
@@ -34,16 +35,26 @@ export class AppComponent implements OnInit {
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
     {
+      headerName: '受注状況',
+      field: 'jyucyuJyokyo',
+      filter: 'agSetColumnFilter',
+      hide: true,
+      cellRenderer: (params: ICellRendererParams<SalesRow, OrderStatus>) =>
+        this.statusBadgeRenderer(params.value)
+    },
+    {
       headerName: '受注日',
-      field: 'orderDate',
+      field: 'jyucyuDate',
       filter: 'agDateColumnFilter',
       valueFormatter: (params) => this.dateFormatter(params),
+    },
+    { headerName: '受注番号', field: 'jyucyuNo', filter: 'agTextColumnFilter', 
       // Master/Detail の展開アイコンを表示
       cellRenderer: 'agGroupCellRenderer'
-    },
-    { headerName: '受注番号', field: 'orderId', filter: 'agTextColumnFilter' },
+     },
+    { headerName: '取引先コード', field: 'customerCode', filter: 'agTextColumnFilter' },
     {
-      headerName: '取引先',
+      headerName: '取引先名',
       field: 'customer',
       filter: 'agTextColumnFilter',
       // クリック可能であることを見た目で示す
@@ -51,17 +62,38 @@ export class AppComponent implements OnInit {
     },
     {
       headerName: '受注金額',
-      field: 'totalAmount',
+      field: 'jyucyuKingakuGokei',
       filter: 'agNumberColumnFilter',
       valueFormatter: (params) => this.currencyFormatter(params)
     },
     {
-      headerName: '受注状況',
-      field: 'status',
+      headerName: '粗利益',
+      field: 'ararieki',
+      filter: 'agNumberColumnFilter',
+      hide: true,
+      valueFormatter: (params) => this.currencyFormatter(params)
+    },
+    {
+      headerName: '粗利益率',
+      field: 'arariekiRitsu',
+      filter: 'agNumberColumnFilter',
+      hide: true,
+      valueFormatter: (params) => this.rateFormatter(params.value)
+    },
+    {
+      headerName: '取引形態',
+      field: 'torihikiKeitai',
       filter: 'agSetColumnFilter',
-      cellRenderer: (params: ICellRendererParams<SalesRow, OrderStatus>) =>
-        this.statusBadgeRenderer(params.value)
-    }
+      hide: true
+    },
+    {
+      headerName: '内税外税',
+      field: 'utizeiSotozei',
+      filter: 'agSetColumnFilter',
+      hide: true
+    },
+    { headerName: '出荷先コード', field: 'shipToCode', filter: 'agTextColumnFilter' },
+    { headerName: '出荷先名', field: 'shipToName', filter: 'agTextColumnFilter' }
   ];
 
   // 初期表示では空配列にして、非同期取得後に反映する
@@ -73,7 +105,13 @@ export class AppComponent implements OnInit {
     resizable: true,
     flex: 1,
     minWidth: 130,
-    floatingFilter: true
+    floatingFilter: true,
+  };
+
+  // サイドバー（列表示/非表示切替）設定
+  readonly sideBar: SideBarDef = {
+    toolPanels: ['columns'],
+    defaultToolPanel: 'columns',
   };
 
   // Excel出力時はExcelテーブル形式でエクスポートする
@@ -246,6 +284,14 @@ export class AppComponent implements OnInit {
 
   private currencyFormatter(params: { value: number | null | undefined }): string {
     return this.currencyValue(params.value);
+  }
+
+  private rateFormatter(value: number | null | undefined): string {
+    if (value == null) {
+      return '';
+    }
+
+    return `${value.toFixed(1)}%`;
   }
 
   // 受注状況に応じた色付きバッジHTMLを返す
