@@ -12,7 +12,13 @@
     <span class="toolbar-spacer"></span>
 
     <button type="button" class="btn btn-sm">一括登録</button>
-    <button type="button" class="btn btn-sm" (click)="exportAsExcelTable()">データ出力</button>
+    <div class="dropdown dropdown-bottom">
+      <div tabindex="0" role="button" class="btn btn-sm">データ出力</div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
+        <li><a (click)="exportAsCsv()">CSV出力</a></li>
+        <li><a (click)="exportAsExcelTable()">Excel出力</a></li>
+      </ul>
+    </div>
     <button type="button" class="btn btn-sm">帳票発行</button>
   </div>
 

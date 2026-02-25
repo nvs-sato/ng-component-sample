@@ -82,7 +82,8 @@ export class JyucyuListComponent implements OnInit {
       field: 'jyucyuKingakuGokei',
       filter: 'agNumberColumnFilter',
       enableValue: true,
-      valueFormatter: (params) => this.currencyFormatter(params)
+      valueFormatter: (params) => this.currencyFormatter(params),
+      valueGetter: (params) => params.data?.jyucyuKingakuGokei
     },
     {
       headerName: '粗利益',
@@ -98,7 +99,7 @@ export class JyucyuListComponent implements OnInit {
       filter: 'agNumberColumnFilter',
       enableValue: true,
       hide: true,
-      valueFormatter: (params) => this.rateFormatter(params.value)
+      valueFormatter: (params) => this.rateFormatter(params.value),
     },
     {
       headerName: '取引形態',
@@ -270,6 +271,16 @@ export class JyucyuListComponent implements OnInit {
       fileName: '受注一覧.xlsx',
       sheetName: '受注一覧',
       exportAsExcelTable: true
+    });
+  }
+
+  exportAsCsv(): void {
+    if (!this.gridApi) {
+      return;
+    }
+
+    this.gridApi.exportDataAsCsv({
+      fileName: '受注一覧.csv'
     });
   }
 
