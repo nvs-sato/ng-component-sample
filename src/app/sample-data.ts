@@ -89,7 +89,9 @@ function createSalesRows(): SalesRow[] {
     const orderDate = `2026-02-${day.toString().padStart(2, '0')}`;
     const orderId = `J-2026-${seq.toString().padStart(3, '0')}`;
     const customer = customers[(seq - 1) % customers.length];
-    const totalAmount = 90000 + ((seq * 13791) % 700000);
+    // 金額にメリハリを付けるため、低額〜高額帯を混在させる
+    const amountBand = [8000, 25000, 70000, 180000, 450000][seq % 5];
+    const totalAmount = amountBand + ((seq * 13791) % 420000);
     const status = statuses[(seq - 1) % statuses.length];
 
     rows.push(createOrder(orderDate, orderId, customer, totalAmount, status, seq));
