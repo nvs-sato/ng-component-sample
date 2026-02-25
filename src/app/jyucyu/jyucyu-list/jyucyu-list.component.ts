@@ -2,8 +2,10 @@
 import { Router } from '@angular/router';
 import {
   CellClickedEvent,
+  CellKeyDownEvent,
   ColDef,
   ExcelExportParams,
+  FullWidthCellKeyDownEvent,
   GetContextMenuItemsParams,
   GridApi,
   GridReadyEvent,
@@ -353,6 +355,24 @@ export class JyucyuListComponent implements OnInit {
 
   closeCustomerPopup(): void {
     this.selectedTorihikisaki = null;
+  }
+
+  // Ctrl + ←/→ でページネーションを前後移動する
+  onCellKeyDown(event: CellKeyDownEvent<SalesRow> | FullWidthCellKeyDownEvent<SalesRow>): void {
+    if (!this.gridApi || !(event.event instanceof KeyboardEvent) || !event.event.ctrlKey) {
+      return;
+    }
+
+    if (event.event.key === 'ArrowRight') {
+      this.gridApi.paginationGoToNextPage();
+      event.event.preventDefault();
+      return;
+    }
+
+    if (event.event.key === 'ArrowLeft') {
+      this.gridApi.paginationGoToPreviousPage();
+      event.event.preventDefault();
+    }
   }
 
   // コンテキストメニューから選択モードを切り替える
