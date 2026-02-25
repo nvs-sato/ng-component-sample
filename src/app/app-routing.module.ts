@@ -6,7 +6,9 @@ import { JyucyuRegisterComponent } from './jyucyu/jyucyu-register/jyucyu-registe
 const routes: Routes = [
   { path: '', redirectTo: 'jyucyu/list', pathMatch: 'full' },
   { path: 'jyucyu/list', component: JyucyuListComponent },
-  { path: 'jyucyu/register', component: JyucyuRegisterComponent }
+  { path: 'jyucyu/register', component: JyucyuRegisterComponent },
+  // 編集画面は登録画面コンポーネントを再利用する
+  { path: 'jyucyu/edit', component: JyucyuRegisterComponent }
 ];
 
 @NgModule({

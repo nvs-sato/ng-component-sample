@@ -308,13 +308,15 @@ export class JyucyuListComponent implements OnInit {
     return rowIndexes.size;
   }
 
-  // 受注行のダブルクリック時に、対象データを確認用にコンソールへ出力
+  // 受注行のダブルクリック時は、編集画面へ受注ID付きで遷移する
   onRowDoubleClicked(event: RowDoubleClickedEvent<SalesRow>): void {
     if (!event.data) {
       return;
     }
 
-    console.log('[受注ダブルクリック]', event.data);
+    this.router.navigate(['/jyucyu/edit'], {
+      queryParams: { id: event.data.jyucyuNo }
+    });
   }
 
   // 新規ボタン押下時に受注登録画面へ遷移
