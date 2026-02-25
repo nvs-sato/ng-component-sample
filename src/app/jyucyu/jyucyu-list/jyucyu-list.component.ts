@@ -32,6 +32,7 @@ export class JyucyuListComponent implements OnInit {
 
   // データロード中の表示制御
   isLoading = true;
+  selectedRowCount = 0;
   private gridApi: GridApi<SalesRow> | null = null;
   private selectionMode: 'range' | 'row' = 'range';
 
@@ -248,6 +249,63 @@ export class JyucyuListComponent implements OnInit {
     this.gridApi = event.api;
   }
 
+  // 選択行数を保持し、ボタン活性制御に利用
+  onSelectionChanged(): void {
+    this.updateSelectedRowCount();
+  }
+
+  // セル範囲選択の変更時も、選択行数判定を更新する
+  onRangeSelectionChanged(): void {
+    this.updateSelectedRowCount();
+  }
+
+  // 行選択/セル範囲選択の両方から、実質的な選択行数を算出
+  private updateSelectedRowCount(): void {
+    if (!this.gridApi) {
+      this.selectedRowCount = 0;
+      return;
+    }
+
+    const rowSelectedCount = this.gridApi.getSelectedRows().length;
+    const rangeSelectedCount = this.getRangeSelectedRowCount();
+    this.selectedRowCount = Math.max(rowSelectedCount, rangeSelectedCount);
+  }
+
+  // セル範囲選択から、縦方向に選択された行数を算出
+  private getRangeSelectedRowCount(): number {
+    if (!this.gridApi || !this.isRangeSelectionMode) {
+      return 0;
+    }
+
+    const apiWithRanges = this.gridApi as unknown as {
+      getCellRanges?: () => Array<{
+        startRow?: { rowIndex: number | null };
+        endRow?: { rowIndex: number | null };
+      }>;
+    };
+    const ranges = apiWithRanges.getCellRanges?.() ?? [];
+    if (!ranges.length) {
+      return 0;
+    }
+
+    const rowIndexes = new Set<number>();
+    ranges.forEach((range) => {
+      const start = range.startRow?.rowIndex;
+      const end = range.endRow?.rowIndex;
+      if (start == null || end == null) {
+        return;
+      }
+
+      const min = Math.min(start, end);
+      const max = Math.max(start, end);
+      for (let i = min; i <= max; i++) {
+        rowIndexes.add(i);
+      }
+    });
+
+    return rowIndexes.size;
+  }
+
   // 受注行のダブルクリック時に、対象データを確認用にコンソールへ出力
   onRowDoubleClicked(event: RowDoubleClickedEvent<SalesRow>): void {
     if (!event.data) {
@@ -308,6 +366,7 @@ export class JyucyuListComponent implements OnInit {
     // モード変更時に既存選択状態をクリア
     this.gridApi.deselectAll();
     (this.gridApi as unknown as { clearRangeSelection?: () => void }).clearRangeSelection?.();
+    this.selectedRowCount = 0;
   }
 
   private dateFormatter(params: { value: string | null | undefined }): string {
@@ -371,4 +430,3 @@ export class JyucyuListComponent implements OnInit {
     return `<span class="${classMap[status]}">${status}</span>`;
   }
 }
-

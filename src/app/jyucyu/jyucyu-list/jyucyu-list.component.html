@@ -4,8 +4,8 @@
   <div class="toolbar-actions">
     <button type="button" class="btn btn-sm">グラフ表示</button>
     <button type="button" class="btn btn-primary btn-sm" (click)="moveToRegister()">新規</button>
-    <button type="button" class="btn btn-sm">修正</button>
-    <button type="button" class="btn btn-sm">複写</button>
+    <button type="button" class="btn btn-sm" [disabled]="selectedRowCount > 1">修正</button>
+    <button type="button" class="btn btn-sm" [disabled]="selectedRowCount > 1">複写</button>
     <button type="button" class="btn btn-sm">削除</button>
     <button type="button" class="btn btn-sm">...</button>
 
@@ -39,6 +39,8 @@
     [rowSelection]="rowSelection"
     [defaultExcelExportParams]="defaultExcelExportParams"
     (gridReady)="onGridReady($event)"
+    (selectionChanged)="onSelectionChanged()"
+    (rangeSelectionChanged)="onRangeSelectionChanged()"
     (rowDoubleClicked)="onRowDoubleClicked($event)"
     (cellClicked)="onCellClicked($event)"
   ></ag-grid-angular>
