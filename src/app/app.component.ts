@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   // データロード中の表示制御
   isLoading = true;
   private gridApi: GridApi<SalesRow> | null = null;
+  private selectionMode: 'range' | 'row' = 'range';
 
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
@@ -133,9 +134,34 @@ export class AppComponent implements OnInit {
     params: GetContextMenuItemsParams<SalesRow>
   ): (string | MenuItemDef<SalesRow>)[] => {
     const defaultItems = params.defaultItems ?? [];
+    const selectionMenu: MenuItemDef<SalesRow> = {
+      name: '選択方法',
+      subMenu: [
+        {
+          name: '範囲選択',
+          checked: this.selectionMode === 'range',
+          action: () => this.setSelectionMode('range')
+        },
+        {
+          name: '行選択',
+          checked: this.selectionMode === 'row',
+          action: () => this.setSelectionMode('row')
+        }
+      ]
+    };
 
-    return ['copy', 'copyWithHeaders', 'separator', ...defaultItems];
+    return [selectionMenu, 'separator', 'copy', 'copyWithHeaders', 'separator', ...defaultItems];
   };
+
+  // 現在の選択モードに応じてセル範囲選択を切り替える
+  get isRangeSelectionMode(): boolean {
+    return this.selectionMode === 'range';
+  }
+
+  // 現在の選択モードに応じて行選択を切り替える
+  get rowSelection(): 'multiple' | undefined {
+    return this.selectionMode === 'row' ? 'multiple' : undefined;
+  }
 
   async ngOnInit(): Promise<void> {
     // サーバー取得を模した非同期読み込み
@@ -170,6 +196,19 @@ export class AppComponent implements OnInit {
 
   closeCustomerPopup(): void {
     this.selectedCustomerDetail = null;
+  }
+
+  // コンテキストメニューから選択モードを切り替える
+  private setSelectionMode(mode: 'range' | 'row'): void {
+    this.selectionMode = mode;
+
+    if (!this.gridApi) {
+      return;
+    }
+
+    // モード変更時に既存選択状態をクリア
+    this.gridApi.deselectAll();
+    (this.gridApi as unknown as { clearRangeSelection?: () => void }).clearRangeSelection?.();
   }
 
   private dateFormatter(params: { value: string | null | undefined }): string {
