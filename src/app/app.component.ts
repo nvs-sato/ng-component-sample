@@ -17,6 +17,7 @@ import {
   SalesRow,
   fetchSalesRows
 } from './sample-data';
+import { AG_GRID_LOCALE_JA_JP } from './ag-grid-locale-ja';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,9 @@ export class AppComponent implements OnInit {
       headerName: '受注状況',
       field: 'jyucyuJyokyo',
       filter: 'agSetColumnFilter',
-      hide: true,
+      hide: false,
+      enablePivot: true,
+      enableRowGroup: true,
       cellRenderer: (params: ICellRendererParams<SalesRow, OrderStatus>) =>
         this.statusBadgeRenderer(params.value)
     },
@@ -46,17 +49,27 @@ export class AppComponent implements OnInit {
       headerName: '受注日',
       field: 'jyucyuDate',
       filter: 'agDateColumnFilter',
+      enableRowGroup: true,
       valueFormatter: (params) => this.dateFormatter(params),
     },
-    { headerName: '受注番号', field: 'jyucyuNo', filter: 'agTextColumnFilter', 
+    {
+      headerName: '受注番号',
+      field: 'jyucyuNo',
+      filter: 'agTextColumnFilter', 
       // Master/Detail の展開アイコンを表示
       cellRenderer: 'agGroupCellRenderer'
      },
-    { headerName: '取引先コード', field: 'customerCode', filter: 'agTextColumnFilter' },
+    {
+      headerName: '取引先コード',
+      field: 'customerCode',
+      filter: 'agTextColumnFilter',
+      enableRowGroup: true,
+    },
     {
       headerName: '取引先名',
       field: 'customer',
       filter: 'agTextColumnFilter',
+      enableRowGroup: true,
       // クリック可能であることを見た目で示す
       cellClass: 'customer-link-cell'
     },
@@ -64,12 +77,14 @@ export class AppComponent implements OnInit {
       headerName: '受注金額',
       field: 'jyucyuKingakuGokei',
       filter: 'agNumberColumnFilter',
+      enableValue: true,
       valueFormatter: (params) => this.currencyFormatter(params)
     },
     {
       headerName: '粗利益',
       field: 'ararieki',
       filter: 'agNumberColumnFilter',
+      enableValue: true,
       hide: true,
       valueFormatter: (params) => this.currencyFormatter(params)
     },
@@ -77,6 +92,7 @@ export class AppComponent implements OnInit {
       headerName: '粗利益率',
       field: 'arariekiRitsu',
       filter: 'agNumberColumnFilter',
+      enableValue: true,
       hide: true,
       valueFormatter: (params) => this.rateFormatter(params.value)
     },
@@ -84,16 +100,28 @@ export class AppComponent implements OnInit {
       headerName: '取引形態',
       field: 'torihikiKeitai',
       filter: 'agSetColumnFilter',
+      enableRowGroup: true,
       hide: true
     },
     {
       headerName: '内税外税',
       field: 'utizeiSotozei',
       filter: 'agSetColumnFilter',
+      enableRowGroup: true,
       hide: true
     },
-    { headerName: '出荷先コード', field: 'shipToCode', filter: 'agTextColumnFilter' },
-    { headerName: '出荷先名', field: 'shipToName', filter: 'agTextColumnFilter' }
+    {
+      headerName: '出荷先コード',
+      field: 'shipToCode',
+      filter: 'agTextColumnFilter',
+      enableRowGroup: true,
+    },
+    {
+      headerName: '出荷先名',
+      field: 'shipToName',
+      filter: 'agTextColumnFilter',
+      enableRowGroup: true,
+    }
   ];
 
   // 初期表示では空配列にして、非同期取得後に反映する
@@ -118,6 +146,9 @@ export class AppComponent implements OnInit {
   readonly defaultExcelExportParams: ExcelExportParams = {
     exportAsExcelTable: true
   };
+
+  // AG Gridの表示文言を日本語化
+  readonly localeText: Record<string, string> = AG_GRID_LOCALE_JA_JP;
 
   // 詳細行（子グリッド）の設定
   readonly detailCellRendererParams = {
@@ -148,6 +179,7 @@ export class AppComponent implements OnInit {
       ],
       // 詳細行側もセル範囲選択を有効化
       enableRangeSelection: true,
+      localeText: AG_GRID_LOCALE_JA_JP,
       defaultColDef: {
         sortable: true,
         resizable: true,
@@ -310,3 +342,6 @@ export class AppComponent implements OnInit {
     return `<span class="${classMap[status]}">${status}</span>`;
   }
 }
+
+
+
