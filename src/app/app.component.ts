@@ -2,7 +2,10 @@
 import {
   CellClickedEvent,
   ColDef,
+  ExcelExportParams,
   GetContextMenuItemsParams,
+  GridApi,
+  GridReadyEvent,
   ICellRendererParams,
   MenuItemDef
 } from 'ag-grid-community';
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit {
 
   // データロード中の表示制御
   isLoading = true;
+  private gridApi: GridApi<SalesRow> | null = null;
 
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
@@ -69,6 +73,11 @@ export class AppComponent implements OnInit {
     flex: 1,
     minWidth: 130,
     floatingFilter: true
+  };
+
+  // Excel出力時はExcelテーブル形式でエクスポートする
+  readonly defaultExcelExportParams: ExcelExportParams = {
+    exportAsExcelTable: true
   };
 
   // 詳細行（子グリッド）の設定
@@ -132,6 +141,22 @@ export class AppComponent implements OnInit {
     // サーバー取得を模した非同期読み込み
     this.rowData = await fetchSalesRows(1500);
     this.isLoading = false;
+  }
+
+  onGridReady(event: GridReadyEvent<SalesRow>): void {
+    this.gridApi = event.api;
+  }
+
+  exportAsExcelTable(): void {
+    if (!this.gridApi) {
+      return;
+    }
+
+    this.gridApi.exportDataAsExcel({
+      fileName: '受注一覧.xlsx',
+      sheetName: '受注一覧',
+      exportAsExcelTable: true
+    });
   }
 
   // 取引先列クリック時に取引先詳細ポップアップを開く

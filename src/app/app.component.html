@@ -1,11 +1,14 @@
 ﻿<div class="page">
   <h1>AG Grid サンプル（日本仕様）</h1>
   <p>受注明細は行を展開して確認できます（受注日列の左側アイコン）。</p>
+  <button type="button" class="export-btn" (click)="exportAsExcelTable()">
+    Excelテーブル出力
+  </button>
 
   <p *ngIf="isLoading" class="loading-text">データを読み込み中です...</p>
 
   <ag-grid-angular
-    class="ag-theme-quartz grid"
+    class="ag-theme-balham grid"
     [columnDefs]="columnDefs"
     [rowData]="rowData"
     [defaultColDef]="defaultColDef"
@@ -14,6 +17,8 @@
     [detailCellRendererParams]="detailCellRendererParams"
     [isRowMaster]="isRowMaster"
     [enableRangeSelection]="true"
+    [defaultExcelExportParams]="defaultExcelExportParams"
+    (gridReady)="onGridReady($event)"
     (cellClicked)="onCellClicked($event)"
   ></ag-grid-angular>
 </div>
@@ -43,3 +48,4 @@
     </dl>
   </section>
 </div>
+
