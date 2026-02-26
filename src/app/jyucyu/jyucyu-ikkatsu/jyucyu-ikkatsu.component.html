@@ -19,7 +19,7 @@
           <section class="sample-area">
             <h3 class="text-sm font-semibold">CSVサンプル</h3>
             <p class="text-xs text-slate-500">下のカードをドラッグしてドロップゾーンへドロップすると、D&Dをエミュレートできます。</p>
-            <div class="sample-fairu" draggable="true" (dragstart)="onSampleDragStart($event)">
+            <div class="sample-file" draggable="true" (dragstart)="onSampleDragStart($event)">
               <span class="badge badge-primary badge-sm">CSV</span>
               <span>{{ sampleFairuMei }}</span>
               <button type="button" class="btn btn-xs btn-outline" (click)="torikomiSampleCsv()">このサンプルを取り込む</button>
@@ -30,7 +30,7 @@
             <input type="file" class="file-input file-input-bordered w-full max-w-md" accept=".csv,.xlsx,.xls" (change)="onFairuSentaku($event)" />
             <span>ここにファイルをドラッグ&ドロップ、または上のファイル選択で指定してください。</span>
           </label>
-          <p *ngIf="fairuMei" class="text-sm">読込対象: {{ fairuMei }}</p>
+          <p *ngIf="fileMei" class="text-sm">読込対象: {{ fileMei }}</p>
           <p *ngIf="eraaMessage" class="text-error">{{ eraaMessage }}</p>
         </div>
 
@@ -39,15 +39,15 @@
           <div class="himozuke-wrap">
             <div class="himozuke-col" *ngFor="let settei of himozukeSetteiList">
               <label class="font-semibold">{{ settei.torikomiLabel }}</label>
-              <select class="select select-sm select-bordered" [(ngModel)]="settei.fairuKamoku">
+              <select class="select select-sm select-bordered" [(ngModel)]="settei.fileKamoku">
                 <option value="">未選択</option>
-                <option *ngFor="let kamoku of fairuKamokuList" [value]="kamoku">{{ kamoku }}</option>
+                <option *ngFor="let kamoku of fileKamokuList" [value]="kamoku">{{ kamoku }}</option>
               </select>
               <div class="syoTo-preview">
                 <p class="syoTo-title">先頭5行プレビュー</p>
-                <p class="syoTo-empty" *ngIf="!settei.fairuKamoku">項目を選択してください</p>
-                <ol *ngIf="settei.fairuKamoku">
-                  <li *ngFor="let value of getSyoTo5GyoValueList(settei.fairuKamoku)">{{ value }}</li>
+                <p class="syoTo-empty" *ngIf="!settei.fileKamoku">項目を選択してください</p>
+                <ol *ngIf="settei.fileKamoku">
+                  <li *ngFor="let value of getSyoTo5GyoValueList(settei.fileKamoku)">{{ value }}</li>
                 </ol>
               </div>
             </div>

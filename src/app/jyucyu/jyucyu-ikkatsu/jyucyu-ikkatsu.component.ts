@@ -1,16 +1,17 @@
 ﻿import { Component } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ValueParserParams } from 'ag-grid-community';
 import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
 
 interface TorikomiKamoku {
   key: string;
   label: string;
+  cellDataType?: string;
 }
 
 interface HimozukeSettei {
   torikomiKey: string;
   torikomiLabel: string;
-  fairuKamoku: string;
+  fileKamoku: string;
 }
 
 type FairuGyo = Record<string, string>;
@@ -26,33 +27,35 @@ export class JyucyuIkkatsuComponent {
   sutepuNo = 1;
   dragActive = false;
   eraaMessage = '';
-  fairuMei = '';
-  fairuKamokuList: string[] = [];
-  fairuGyoList: FairuGyo[] = [];
+  fileMei = '';
+  fileKamokuList: string[] = [];
+  fileGyoList: FairuGyo[] = [];
   himozukeSetteiList: HimozukeSettei[] = [];
   purebyuGyoList: PurebyuGyo[] = [];
   purebyuColDefs: ColDef<PurebyuGyo>[] = [];
   readonly localeText: Record<string, string> = AG_GRID_LOCALE_JA_JP;
+  readonly torihikiKeitaiSentakuList = ['', '掛売上', '都度請求', '現金売上'];
+  readonly utizeiSotozeiSentakuList = ['', '内税', '外税'];
 
   readonly sampleFairuMei = 'jyucyu_ikkatsu_sample.csv';
   // 埋め込みサンプルはヘッダー + 10行データで用意する。
   readonly sampleCsvText = [
     'jyucyuDate,jyucyuNo,torihikisakiCd,torihikisakiMei,shipToCode,shipToName,summary,jyucyuKingakuGokei,ararieki,arariekiRitsu,jyucyuJyokyo,torihikiKeitai,utizeiSotozei,lineNo,detailType,shohin,quantity,unitPrice,amount,remarks',
-    '2026-02-26,J-2026-901,CUST-0901,Yamada Shouji,SHIP-0901,Yamada Tokyo DC,Shinki Anken,88000,17600,20.0,受注,掛売上,外税,J-2026-901-01,通常,Sensor,8,11000,88000,AM Nouhin',
-    '2026-02-26,J-2026-902,CUST-0902,Tanaka Kougyo,SHIP-0902,Tanaka Kansai Soko,Teiki Hojyu,56000,11200,20.0,受注,都度請求,内税,J-2026-902-01,通常,Module,4,14000,56000,Isogi',
-    '2026-02-25,J-2026-903,CUST-0903,Suzuki Foods,SHIP-0903,Suzuki Chubu Center,Hojyu,120000,22800,19.0,一部出荷,掛売上,外税,J-2026-903-01,通常,Valve,12,10000,120000,Bin1',
-    '2026-02-25,J-2026-904,CUST-0904,Kato Logi,SHIP-0904,Kato West Hub,Shinki,45000,9000,20.0,受注,現金売上,外税,J-2026-904-01,通常,Cable,30,1500,45000,PM',
-    '2026-02-24,J-2026-905,CUST-0905,Sato Denki,SHIP-0905,Sato Main Soko,Tokubetu,77000,13860,18.0,出荷完了,掛売上,内税,J-2026-905-01,通常,PowerUnit,7,11000,77000,LotA',
-    '2026-02-24,J-2026-906,CUST-0906,Takahashi Kenzai,SHIP-0906,Takahashi East Soko,Saityumon,98000,19600,20.0,受注,都度請求,外税,J-2026-906-01,通常,Panel,14,7000,98000,Check',
-    '2026-02-23,J-2026-907,CUST-0907,Nakamura Seimitsu,SHIP-0907,Nakamura Plant,Antei,63000,12600,20.0,一部出荷,掛売上,内税,J-2026-907-01,通常,Gear,9,7000,63000,Line2',
-    '2026-02-23,J-2026-908,CUST-0908,Kobayashi Medical,SHIP-0908,Kobayashi Med Ctr,Iryo,150000,27000,18.0,受注,掛売上,外税,J-2026-908-01,通常,Filter,50,3000,150000,Cold',
-    '2026-02-22,J-2026-909,CUST-0909,Watanabe Trading,SHIP-0909,Watanabe Port,Gaityo,39000,7800,20.0,キャンセル,都度請求,外税,J-2026-909-01,通常,Bracket,13,3000,39000,Cancel',
-    '2026-02-22,J-2026-910,CUST-0910,Ito Kagaku,SHIP-0910,Ito RnD Soko,Kenkyu,112000,22400,20.0,受注,現金売上,内税,J-2026-910-01,通常,ChemPack,16,7000,112000,Sample'
+    '2026/02/26,J-2026-901,CUST-0901,Yamada Shouji,SHIP-0901,Yamada Tokyo DC,Shinki Anken,88000,17600,20.0,受注,掛売上,外税,J-2026-901-01,通常,Sensor,8,11000,88000,AM Nouhin',
+    '2026/02/26,J-2026-902,CUST-0902,Tanaka Kougyo,SHIP-0902,Tanaka Kansai Soko,Teiki Hojyu,56000,11200,20.0,受注,都度請求,内税,J-2026-902-01,通常,Module,4,14000,56000,Isogi',
+    '2026/02/25,J-2026-903,CUST-0903,Suzuki Foods,SHIP-0903,Suzuki Chubu Center,Hojyu,120000,22800,19.0,一部出荷,掛売上,外税,J-2026-903-01,通常,Valve,12,10000,120000,Bin1',
+    '2026/02/25,J-2026-904,CUST-0904,Kato Logi,SHIP-0904,Kato West Hub,Shinki,45000,9000,20.0,受注,現金売上,外税,J-2026-904-01,通常,Cable,30,1500,45000,PM',
+    '2026/02/24,J-2026-905,CUST-0905,Sato Denki,SHIP-0905,Sato Main Soko,Tokubetu,77000,13860,18.0,出荷完了,掛売上,内税,J-2026-905-01,通常,PowerUnit,7,11000,77000,LotA',
+    '2026/02/24,J-2026-906,CUST-0906,Takahashi Kenzai,SHIP-0906,Takahashi East Soko,Saityumon,98000,19600,20.0,受注,都度請求,外税,J-2026-906-01,通常,Panel,14,7000,98000,Check',
+    '2026/02/23,J-2026-907,CUST-0907,Nakamura Seimitsu,SHIP-0907,Nakamura Plant,Antei,63000,12600,20.0,一部出荷,掛売上,内税,J-2026-907-01,通常,Gear,9,7000,63000,Line2',
+    '2026/02/23,J-2026-908,CUST-0908,Kobayashi Medical,SHIP-0908,Kobayashi Med Ctr,Iryo,150000,27000,18.0,受注,掛売上,外税,J-2026-908-01,通常,Filter,50,3000,150000,Cold',
+    '2026/02/22,J-2026-909,CUST-0909,Watanabe Trading,SHIP-0909,Watanabe Port,Gaityo,39000,7800,20.0,キャンセル,都度請求,外税,J-2026-909-01,通常,Bracket,13,3000,39000,Cancel',
+    '2026/02/22,J-2026-910,CUST-0910,Ito Kagaku,SHIP-0910,Ito RnD Soko,Kenkyu,112000,22400,20.0,受注,現金売上,内税,J-2026-910-01,通常,ChemPack,16,7000,112000,Sample'
   ].join('\n');
   readonly sampleHyoiLineList = this.sampleCsvText.split('\n');
 
   readonly torikomiKamokuList: TorikomiKamoku[] = [
-    { key: 'jyucyuDate', label: '受注日' },
+    { key: 'jyucyuDate', label: '受注日', cellDataType: 'date' },
     { key: 'jyucyuNo', label: '受注番号' },
     { key: 'torihikisakiCd', label: '取引先コード' },
     { key: 'torihikisakiMei', label: '取引先名' },
@@ -76,12 +79,12 @@ export class JyucyuIkkatsuComponent {
 
   onFairuSentaku(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const fairu = input.files?.[0];
-    if (!fairu) {
+    const file = input.files?.[0];
+    if (!file) {
       return;
     }
 
-    this.yomikomiFairu(fairu).finally(() => {
+    this.yomikomiFairu(file).finally(() => {
       // 同一ファイルを再選択できるようにクリアする。
       input.value = '';
     });
@@ -108,12 +111,12 @@ export class JyucyuIkkatsuComponent {
       return;
     }
 
-    const fairu = event.dataTransfer?.files?.[0];
-    if (!fairu) {
+    const file = event.dataTransfer?.files?.[0];
+    if (!file) {
       return;
     }
 
-    void this.yomikomiFairu(fairu);
+    void this.yomikomiFairu(file);
   }
 
   onSampleDragStart(event: DragEvent): void {
@@ -143,11 +146,11 @@ export class JyucyuIkkatsuComponent {
   }
 
   canGoStep2(): boolean {
-    return this.fairuKamokuList.length > 0 && this.fairuGyoList.length > 0;
+    return this.fileKamokuList.length > 0 && this.fileGyoList.length > 0;
   }
 
   canGoStep3(): boolean {
-    return this.himozukeSetteiList.some((item) => item.fairuKamoku);
+    return this.himozukeSetteiList.some((item) => item.fileKamoku);
   }
 
   canGoStep4(): boolean {
@@ -155,28 +158,28 @@ export class JyucyuIkkatsuComponent {
   }
 
   // ステップ2表示用に、選択列の先頭5行のみを返す。
-  getSyoTo5GyoValueList(fairuKamoku: string): string[] {
-    if (!fairuKamoku) {
+  getSyoTo5GyoValueList(fileKamoku: string): string[] {
+    if (!fileKamoku) {
       return [];
     }
 
-    return this.fairuGyoList
+    return this.fileGyoList
       .slice(0, 5)
-      .map((gyo, idx) => gyo[fairuKamoku] || `(空) [${idx + 1}行目]`);
+      .map((gyo, idx) => gyo[fileKamoku] || `(空) [${idx + 1}行目]`);
   }
 
   startTorikomi(): void {
     window.alert(`取り込み開始: ${this.purebyuGyoList.length}件`);
   }
 
-  private async yomikomiFairu(fairu: File): Promise<void> {
+  private async yomikomiFairu(file: File): Promise<void> {
     this.eraaMessage = '';
-    this.fairuMei = fairu.name;
+    this.fileMei = file.name;
 
     try {
-      const kakutyoshi = fairu.name.split('.').pop()?.toLowerCase() ?? '';
+      const kakutyoshi = file.name.split('.').pop()?.toLowerCase() ?? '';
       if (kakutyoshi === 'csv') {
-        const csvText = await fairu.text();
+        const csvText = await file.text();
         this.haneiCsv(csvText);
       } else if (kakutyoshi === 'xlsx' || kakutyoshi === 'xls') {
         this.eraaMessage = 'Excelファイルの直接読込は未対応です。CSV形式で保存して取り込んでください。';
@@ -193,9 +196,9 @@ export class JyucyuIkkatsuComponent {
     }
   }
 
-  private yomikomiNaibuCsv(csvText: string, fairuMei: string): void {
+  private yomikomiNaibuCsv(csvText: string, fileMei: string): void {
     this.eraaMessage = '';
-    this.fairuMei = fairuMei;
+    this.fileMei = fileMei;
 
     try {
       this.haneiCsv(csvText);
@@ -226,8 +229,8 @@ export class JyucyuIkkatsuComponent {
       return rec;
     });
 
-    this.fairuKamokuList = hedder;
-    this.fairuGyoList = seikeiGyoList;
+    this.fileKamokuList = hedder;
+    this.fileGyoList = seikeiGyoList;
   }
 
   // ダブルクォート内カンマを考慮した最小CSVパーサー。
@@ -268,7 +271,7 @@ export class JyucyuIkkatsuComponent {
 
   private syokikaHimozuke(): void {
     const normalizedMap = new Map<string, string>();
-    this.fairuKamokuList.forEach((kamoku) => {
+    this.fileKamokuList.forEach((kamoku) => {
       normalizedMap.set(this.normalizeKamoku(kamoku), kamoku);
     });
 
@@ -280,7 +283,7 @@ export class JyucyuIkkatsuComponent {
       return {
         torikomiKey: kamoku.key,
         torikomiLabel: kamoku.label,
-        fairuKamoku: match
+        fileKamoku: match
       };
     });
   }
@@ -290,16 +293,32 @@ export class JyucyuIkkatsuComponent {
   }
 
   private sakuseiPurebyu(): void {
-    const map = new Map(this.himozukeSetteiList.map((item) => [item.torikomiKey, item.fairuKamoku]));
+    const map = new Map(this.himozukeSetteiList.map((item) => [item.torikomiKey, item.fileKamoku]));
     this.purebyuColDefs = this.torikomiKamokuList.map((kamoku) => ({
       headerName: kamoku.label,
       field: kamoku.key,
+      cellDataType: kamoku.cellDataType,
       editable: true,
       minWidth: 140,
-      flex: 1
+      flex: 1,
+      // 取引形態・内税外税は未選択を含む選択式にする。
+      cellEditor:
+        kamoku.key === 'torihikiKeitai' || kamoku.key === 'utizeiSotozei'
+          ? 'agSelectCellEditor'
+          : undefined,
+      cellEditorParams:
+        kamoku.key === 'torihikiKeitai'
+          ? { values: this.torihikiKeitaiSentakuList }
+          : kamoku.key === 'utizeiSotozei'
+            ? { values: this.utizeiSotozeiSentakuList }
+          : undefined,
+      // 日付項目は貼り付け入力を正規化して保存する。
+      valueParser: this.isHidukeKamoku(kamoku.key)
+        ? (params) => this.hidukeValueParser(params)
+        : undefined
     }));
 
-    this.purebyuGyoList = this.fairuGyoList.map((gyo) => {
+    this.purebyuGyoList = this.fileGyoList.map((gyo) => {
       const row: PurebyuGyo = {};
       this.torikomiKamokuList.forEach((kamoku) => {
         const sentaku = map.get(kamoku.key) ?? '';
@@ -307,5 +326,62 @@ export class JyucyuIkkatsuComponent {
       });
       return row;
     });
+  }
+
+  private isHidukeKamoku(kamokuKey: string): boolean {
+    return kamokuKey.toLowerCase().endsWith('date');
+  }
+
+  // 8桁数字・スラッシュ・ハイフン・年月日区切りを YYYY-MM-DD に統一する。
+  private hidukeValueParser(params: ValueParserParams<PurebyuGyo>): Date | unknown {
+    const seikeiZumi = this.seikeiHidukeValue(params.newValue);
+    return seikeiZumi == null ? params.oldValue : seikeiZumi;
+  }
+
+  private seikeiHidukeValue(value: unknown): Date | null {
+    const moto = String(value ?? '').trim();
+    if (!moto) {
+      return null;
+    }
+
+    // YYYYMMDD
+    let match = moto.match(/^(\d{4})(\d{2})(\d{2})$/);
+    if (match) {
+      return this.buildHiduke(match[1], match[2], match[3]);
+    }
+
+    // YYYY/MM/DD or YYYY-MM-DD
+    match = moto.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+    if (match) {
+      return this.buildHiduke(match[1], match[2], match[3]);
+    }
+
+    // YYYY年M月D日
+    match = moto.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日$/);
+    if (match) {
+      return this.buildHiduke(match[1], match[2], match[3]);
+    }
+
+    return null;
+  }
+
+  private buildHiduke(year: string, month: string, day: string): Date | null {
+    const yyyy = Number(year);
+    const mm = Number(month);
+    const dd = Number(day);
+    if (!Number.isInteger(yyyy) || !Number.isInteger(mm) || !Number.isInteger(dd)) {
+      return null;
+    }
+
+    const hiduke = new Date(yyyy, mm - 1, dd);
+    if (
+      hiduke.getFullYear() !== yyyy ||
+      hiduke.getMonth() !== mm - 1 ||
+      hiduke.getDate() !== dd
+    ) {
+      return null;
+    }
+
+    return hiduke;
   }
 }
