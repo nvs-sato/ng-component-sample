@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+.component-test-page {
+  padding: 20px 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.component-test-page h1,
+.component-test-page h2,
+.component-test-page p {
+  margin: 0;
+}

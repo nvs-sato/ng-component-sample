@@ -5,6 +5,7 @@ import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ComponentTestPageComponent } from './component/component-test-page/component-test-page.component';
 import { JyucyuIkkatsuComponent } from './jyucyu/jyucyu-ikkatsu/jyucyu-ikkatsu.component';
 import { JyucyuListComponent } from './jyucyu/jyucyu-list/jyucyu-list.component';
 import { JyucyuViewToolPanelComponent } from './jyucyu/jyucyu-list/jyucyu-view-tool-panel.component';
@@ -15,6 +16,7 @@ import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihiki
 @NgModule({
   declarations: [
     AppComponent,
+    ComponentTestPageComponent,
     JyucyuListComponent,
     JyucyuViewToolPanelComponent,
     JyucyuRegisterComponent,

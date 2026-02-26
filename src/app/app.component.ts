@@ -40,7 +40,17 @@ export class AppComponent implements OnInit, OnDestroy {
       jyucyu: '受注',
       list: '受注一覧',
       register: '受注登録',
-      ikkatsu: '受注一括登録'
+      ikkatsu: '受注一括登録',
+      component: 'コンポーネント',
+      'date-input': '日付入力',
+      'year-month-input': '年月入力',
+      'date-range': '日付範囲',
+      'year-month-range': '年月範囲',
+      'list-box': 'リストボックス',
+      'tab-panel': 'タブパネル',
+      'auto-complete': 'オートコンプリート',
+      'multi-auto-complete': 'マルチセレクトオートコンプリート',
+      popup: 'ポップアップ'
     };
 
     let currentPath = '';
