@@ -1,7 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  CellClickedEvent,
   CellKeyDownEvent,
   ColDef,
   ExcelExportParams,
@@ -14,8 +13,8 @@ import {
   RowDoubleClickedEvent,
   SideBarDef
 } from 'ag-grid-community';
+import { TorihikisakiLinkCellRendererComponent } from '../../shared/torihikisaki-link-cell-renderer/torihikisaki-link-cell-renderer.component';
 import {
-  Torihikisaki,
   OrderDetailRow,
   OrderStatus,
   SalesRow,
@@ -29,19 +28,28 @@ import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
   styleUrls: ['./jyucyu-list.component.scss']
 })
 export class JyucyuListComponent implements OnInit {
-  // 取引先セルクリック時に表示するポップアップの選択状態
-  selectedTorihikisaki: Torihikisaki | null = null;
+  // 一覧復帰時に参照するセッションストレージキー
+  private static readonly LIST_RETURN_STATE_KEY = 'jyucyuListReturnState';
 
   // データロード中の表示制御
   isLoading = true;
   selectedRowCount = 0;
   private gridApi: GridApi<SalesRow> | null = null;
   private selectionMode: 'range' | 'row' = 'range';
+  private hasRestoredListState = false;
 
   constructor(private readonly router: Router) {}
 
   // 親グリッド（受注一覧）の列定義
   readonly columnDefs: ColDef<SalesRow>[] = [
+    {
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+      width: 40,
+      maxWidth: 40,
+      lockPosition: true,
+      pinned: 'left',
+    },
     {
       headerName: '受注状況',
       field: 'jyucyuJyokyo',
@@ -68,17 +76,17 @@ export class JyucyuListComponent implements OnInit {
     },
     {
       headerName: '取引先コード',
-      field: 'customerCode',
+      field: 'torihikisakiCd',
       filter: 'agTextColumnFilter',
       enableRowGroup: true
     },
     {
       headerName: '取引先名',
-      field: 'customer',
+      field: 'torihikisakiMei',
       filter: 'agTextColumnFilter',
       enableRowGroup: true,
-      // クリック可能であることを見た目で示す
-      cellClass: 'customer-link-cell'
+      // 取引先詳細ポップアップ専用セルレンダラー
+      cellRenderer: TorihikisakiLinkCellRendererComponent
     },
     {
       headerName: '受注金額',
@@ -86,7 +94,7 @@ export class JyucyuListComponent implements OnInit {
       filter: 'agNumberColumnFilter',
       enableValue: true,
       valueFormatter: (params) => this.currencyFormatter(params),
-      valueGetter: (params) => params.data?.jyucyuKingakuGokei
+      valueGetter: (params) => params.data?.jyucyuKingakuGokei,
     },
     {
       headerName: '粗利益',
@@ -249,6 +257,7 @@ export class JyucyuListComponent implements OnInit {
 
   onGridReady(event: GridReadyEvent<SalesRow>): void {
     this.gridApi = event.api;
+    this.tryRestoreListState();
   }
 
   // 選択行数を保持し、ボタン活性制御に利用
@@ -310,13 +319,71 @@ export class JyucyuListComponent implements OnInit {
 
   // 受注行のダブルクリック時は、編集画面へ受注ID付きで遷移する
   onRowDoubleClicked(event: RowDoubleClickedEvent<SalesRow>): void {
-    if (!event.data) {
+    if (!event.data || !this.gridApi) {
       return;
     }
+
+    // 一覧復帰時にページ位置を戻せるよう、受注IDと表示位置を保存する
+    const returnState = {
+      jyucyuId: event.data.jyucyuNo,
+      page: this.gridApi.paginationGetCurrentPage(),
+      rowIndex: event.rowIndex ?? -1
+    };
+    sessionStorage.setItem(
+      JyucyuListComponent.LIST_RETURN_STATE_KEY,
+      JSON.stringify(returnState)
+    );
 
     this.router.navigate(['/jyucyu/edit'], {
       queryParams: { id: event.data.jyucyuNo }
     });
+  }
+
+  // 編集画面から一覧に戻った際、直前に見ていたページ/行位置へ復元する
+  private tryRestoreListState(): void {
+    if (!this.gridApi || this.isLoading || this.hasRestoredListState) {
+      return;
+    }
+
+    const raw = sessionStorage.getItem(JyucyuListComponent.LIST_RETURN_STATE_KEY);
+    if (!raw) {
+      return;
+    }
+
+    type ReturnState = { jyucyuId: string; page: number; rowIndex: number };
+    let state: ReturnState | null = null;
+    try {
+      state = JSON.parse(raw) as ReturnState;
+    } catch {
+      sessionStorage.removeItem(JyucyuListComponent.LIST_RETURN_STATE_KEY);
+      return;
+    }
+
+    if (!state?.jyucyuId) {
+      sessionStorage.removeItem(JyucyuListComponent.LIST_RETURN_STATE_KEY);
+      return;
+    }
+
+    let targetRowIndex = state.rowIndex;
+    this.gridApi.forEachNode((node) => {
+      if (node.data?.jyucyuNo === state?.jyucyuId && node.rowIndex != null) {
+        targetRowIndex = node.rowIndex;
+      }
+    });
+
+    const pageSize = this.gridApi.paginationGetPageSize() || 100;
+    const targetPage = targetRowIndex >= 0 ? Math.floor(targetRowIndex / pageSize) : state.page;
+    this.gridApi.paginationGoToPage(Math.max(targetPage, 0));
+
+    if (targetRowIndex >= 0) {
+      // ページ描画後に対象行へフォーカスを戻す
+      setTimeout(() => {
+        this.gridApi?.ensureIndexVisible(targetRowIndex, 'middle');
+        this.gridApi?.setFocusedCell(targetRowIndex, 'jyucyuNo');
+      }, 0);
+    }
+
+    this.hasRestoredListState = true;
   }
 
   // 新規ボタン押下時に受注登録画面へ遷移
@@ -344,19 +411,6 @@ export class JyucyuListComponent implements OnInit {
     this.gridApi.exportDataAsCsv({
       fileName: '受注一覧.csv'
     });
-  }
-
-  // 取引先列クリック時に取引先詳細ポップアップを開く
-  onCellClicked(event: CellClickedEvent<SalesRow>): void {
-    if (event.colDef.field !== 'customer' || !event.data) {
-      return;
-    }
-
-    this.selectedTorihikisaki = event.data.torihikisaki;
-  }
-
-  closeCustomerPopup(): void {
-    this.selectedTorihikisaki = null;
   }
 
   // Ctrl + ←/→ でページネーションを前後移動する

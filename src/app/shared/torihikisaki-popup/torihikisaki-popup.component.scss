@@ -1,0 +1,22 @@
+﻿.modal-header {
+  margin-bottom: 12px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  row-gap: 8px;
+  column-gap: 12px;
+  margin: 0;
+}
+
+.detail-grid dt {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.detail-grid dd {
+  margin: 0;
+  color: #111827;
+}

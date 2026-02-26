@@ -34,12 +34,6 @@ p {
   height: 560px;
 }
 
-:host ::ng-deep .customer-link-cell {
-  color: #0b57d0;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 :host ::ng-deep .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -67,27 +61,4 @@ p {
 :host ::ng-deep .status-cancelled {
   background: #fce8e6;
   color: #c5221f;
-}
-
-.modal-header {
-  margin-bottom: 12px;
-}
-
-.detail-grid {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  row-gap: 8px;
-  column-gap: 12px;
-  margin: 0;
-}
-
-.detail-grid dt {
-  margin: 0;
-  color: #475569;
-  font-weight: 600;
-}
-
-.detail-grid dd {
-  margin: 0;
-  color: #111827;
 }

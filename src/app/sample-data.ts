@@ -30,8 +30,8 @@ export interface OrderDetailRow {
 export interface SalesRow {
   jyucyuDate: string;
   jyucyuNo: string;
-  customerCode: string;
-  customer: string;
+  torihikisakiCd: string;
+  torihikisakiMei: string;
   shipToCode: string;
   shipToName: string;
   summary: string;
@@ -58,7 +58,7 @@ function wait(ms: number): Promise<void> {
 }
 
 function createSalesRows(): SalesRow[] {
-  const customers = [
+  const torihikisakiList = [
     '株式会社 山田商事',
     '田中工業株式会社',
     '鈴木食品株式会社',
@@ -88,13 +88,13 @@ function createSalesRows(): SalesRow[] {
     const day = ((seq - 1) % 28) + 1;
     const orderDate = `2026-02-${day.toString().padStart(2, '0')}`;
     const orderId = `J-2026-${seq.toString().padStart(3, '0')}`;
-    const customer = customers[(seq - 1) % customers.length];
+    const torihikisakiMei = torihikisakiList[(seq - 1) % torihikisakiList.length];
     // 金額にメリハリを付けるため、低額〜高額帯を混在させる
     const amountBand = [8000, 25000, 70000, 180000, 450000][seq % 5];
     const totalAmount = amountBand + ((seq * 13791) % 420000);
     const status = statuses[(seq - 1) % statuses.length];
 
-    rows.push(createOrder(orderDate, orderId, customer, totalAmount, status, seq));
+    rows.push(createOrder(orderDate, orderId, torihikisakiMei, totalAmount, status, seq));
   }
 
   return rows;
@@ -103,7 +103,7 @@ function createSalesRows(): SalesRow[] {
 function createOrder(
   orderDate: string,
   orderId: string,
-  customer: string,
+  torihikisakiMei: string,
   totalAmount: number,
   status: OrderStatus,
   seq: number
@@ -117,10 +117,10 @@ function createOrder(
   return {
     jyucyuDate: orderDate,
     jyucyuNo: orderId,
-    customerCode: `CUST-${seq.toString().padStart(4, '0')}`,
-    customer,
+    torihikisakiCd: `CUST-${seq.toString().padStart(4, '0')}`,
+    torihikisakiMei,
     shipToCode: `SHIP-${seq.toString().padStart(4, '0')}`,
-    shipToName: `${customer} 納品センター`,
+    shipToName: `${torihikisakiMei} 納品センター`,
     summary: seq % 2 === 0 ? '定期補充分' : '新規案件分',
     jyucyuKingakuGokei: totalAmount,
     ararieki: grossProfit,
@@ -129,11 +129,11 @@ function createOrder(
     torihikiKeitai: tradingTypeList[(seq - 1) % 3],
     utizeiSotozei: taxTypeList[(seq - 1) % 2],
     details: createOrderDetails(orderId, totalAmount),
-    torihikisaki: createTorihikisaki(customer, seq)
+    torihikisaki: createTorihikisaki(torihikisakiMei, seq)
   };
 }
 
-function createTorihikisaki(customerName: string, seq: number): Torihikisaki {
+function createTorihikisaki(torihikisakiMei: string, seq: number): Torihikisaki {
   const tradingTypeList: TradingType[] = ['掛売上', '都度請求', '現金売上'];
   const taxPostingList: TaxPosting[] = ['明細', '伝票', '一括'];
   const idx = (seq - 1) % 3;
@@ -142,7 +142,7 @@ function createTorihikisaki(customerName: string, seq: number): Torihikisaki {
 
   return {
     torihikisakiCd: `CUST-${seq.toString().padStart(4, '0')}`,
-    torihikisakiMei: customerName,
+    torihikisakiMei,
     invoiceRegistrationNumber: `T${(1000000000000 + seq).toString()}`,
     postalCode: `${zipHead}-${zipTail.toString().padStart(4, '0')}`,
     address: `東京都千代田区丸の内${seq}-1-${(seq % 9) + 1}`,
