@@ -1,0 +1,97 @@
+﻿:host {
+  display: inline-block;
+}
+
+.nvs-date {
+  position: relative;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.date-input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.calendar-icon-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.calendar-icon-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.calendar-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.calendar-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.nvs-disabled {
+  opacity: 0.8;
+}
+
+.calendar-pop {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 320px;
+}
+
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.week-cell {
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.day-cell {
+  min-height: 30px;
+}
+
+.day-cell.other-month {
+  opacity: 0.45;
+}
+
+.day-cell.is-selected {
+  background: #2563eb;
+  color: #fff;
+}
+
+.day-cell.is-active {
+  outline: 2px solid #93c5fd;
+  outline-offset: -2px;
+}

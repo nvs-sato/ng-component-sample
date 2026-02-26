@@ -1,9 +1,34 @@
-<section class="component-test-page">
+﻿<section class="component-test-page">
   <h1>コンポーネントテスト</h1>
+
   <div class="card bg-base-100 border border-base-300">
     <div class="card-body">
       <h2>{{ hyojiTitle }}</h2>
       <p>このページで Angular コンポーネントの動作確認を行います。</p>
+
+      <ng-container *ngIf="shubetu === 'date-input'; else sonota">
+        <div class="date-test-wrap">
+          <nvs-input-date
+            [isRequired]="true"
+            [placeholder]="'yyyy/MM/dd'"
+            [minDate]="'2025/01/01'"
+            [maxDate]="'2027/12/31'"
+            [formControl]="dateControl"
+            (initialized)="onInitialized()"
+            (valueChanged)="onValueChanged($event)"
+            (gotFocus)="onGotFocus()"
+            (lostFocus)="onLostFocus()"
+          ></nvs-input-date>
+
+          <p class="text-sm">FormControl値: {{ formControlHyojiText }}</p>
+          <p class="text-sm">最新イベント: {{ saishinEvent }}</p>
+          <p class="text-xs text-slate-500">キー操作: ↑/↓ 日付変更, F4 カレンダー開閉</p>
+        </div>
+      </ng-container>
+
+      <ng-template #sonota>
+        <p class="text-sm">この種類のコンポーネントは後続で実装予定です。</p>
+      </ng-template>
     </div>
   </div>
 </section>

@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
       'tab-panel': 'タブパネル',
       'auto-complete': 'オートコンプリート',
       'multi-auto-complete': 'マルチセレクトオートコンプリート',
+      mask: 'マスク',
       popup: 'ポップアップ'
     };
 
