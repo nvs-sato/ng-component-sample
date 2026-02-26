@@ -20,7 +20,7 @@ export interface Torihikisaki {
 export interface OrderDetailRow {
   lineNo: string;
   detailType: DetailType;
-  product: string;
+  shohin: string;
   quantity: number;
   unitPrice: number;
   amount: number;
@@ -166,7 +166,7 @@ function createOrderDetails(orderId: string, totalAmount: number): OrderDetailRo
     {
       lineNo: `${orderId}-01`,
       detailType: '通常',
-      product: '産業用センサー',
+      shohin: '産業用センサー',
       quantity: detail1Qty,
       unitPrice: baseUnitPrice,
       amount: detail1Amount,
@@ -175,7 +175,7 @@ function createOrderDetails(orderId: string, totalAmount: number): OrderDetailRo
     {
       lineNo: `${orderId}-02`,
       detailType: '通常',
-      product: '制御モジュール',
+      shohin: '制御モジュール',
       quantity: detail2Qty,
       unitPrice: baseUnitPrice,
       amount: detail2Amount,
@@ -184,7 +184,7 @@ function createOrderDetails(orderId: string, totalAmount: number): OrderDetailRo
     {
       lineNo: `${orderId}-03`,
       detailType: adjustment >= 0 ? '送料' : '値引',
-      product: adjustment >= 0 ? '配送費' : '調整値引き',
+      shohin: adjustment >= 0 ? '配送費' : '調整値引き',
       quantity: 1,
       unitPrice: adjustment,
       amount: adjustment,

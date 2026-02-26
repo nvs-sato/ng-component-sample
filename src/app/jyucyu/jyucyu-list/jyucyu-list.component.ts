@@ -172,7 +172,7 @@ export class JyucyuListComponent implements OnInit {
       columnDefs: [
         { headerName: '明細番号', field: 'lineNo', minWidth: 100 },
         { headerName: '明細区分', field: 'detailType', minWidth: 100 },
-        { headerName: '商品', field: 'product', minWidth: 180 },
+        { headerName: '商品', field: 'shohin', minWidth: 180 },
         {
           headerName: '数量',
           field: 'quantity',
