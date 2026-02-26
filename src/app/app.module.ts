@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JyucyuIkkatsuComponent } from './jyucyu/jyucyu-ikkatsu/jyucyu-ikkatsu.component';
 import { JyucyuListComponent } from './jyucyu/jyucyu-list/jyucyu-list.component';
+import { JyucyuViewToolPanelComponent } from './jyucyu/jyucyu-list/jyucyu-view-tool-panel.component';
 import { JyucyuRegisterComponent } from './jyucyu/jyucyu-register/jyucyu-register.component';
 import { TorihikisakiLinkCellRendererComponent } from './shared/torihikisaki-link-cell-renderer/torihikisaki-link-cell-renderer.component';
 import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihikisaki-popup.component';
@@ -15,6 +16,7 @@ import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihiki
   declarations: [
     AppComponent,
     JyucyuListComponent,
+    JyucyuViewToolPanelComponent,
     JyucyuRegisterComponent,
     JyucyuIkkatsuComponent,
     TorihikisakiLinkCellRendererComponent,

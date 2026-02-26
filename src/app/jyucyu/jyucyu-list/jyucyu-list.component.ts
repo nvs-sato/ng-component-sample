@@ -21,6 +21,7 @@ import {
   fetchSalesRows
 } from '../../sample-data';
 import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
+import { JyucyuViewToolPanelComponent } from './jyucyu-view-tool-panel.component';
 
 @Component({
   selector: 'app-jyucyu-list',
@@ -154,8 +155,23 @@ export class JyucyuListComponent implements OnInit {
 
   // サイドバー（列表示/非表示切替）設定
   readonly sideBar: SideBarDef = {
-    toolPanels: ['columns'],
-    defaultToolPanel: 'columns'
+    toolPanels: [
+      {
+        id: 'view',
+        labelDefault: 'ビュー',
+        labelKey: 'view',
+        iconKey: 'menu',
+        toolPanel: JyucyuViewToolPanelComponent
+      },
+      {
+        id: 'columns',
+        labelDefault: '列',
+        labelKey: 'columns',
+        iconKey: 'columns',
+        toolPanel: 'agColumnsToolPanel'
+      }
+    ],
+    defaultToolPanel: 'view'
   };
 
   // Excel出力時はExcelテーブル形式でエクスポートする
