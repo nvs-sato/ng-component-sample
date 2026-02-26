@@ -1,0 +1,87 @@
+<section class="ikkatsu-page">
+  <header class="page-head">
+    <h1>受注一括登録</h1>
+    <p>CSV/Excel を取り込み、列紐付け後に内容確認して登録します。</p>
+  </header>
+
+  <ul class="steps w-full">
+    <li class="step" [class.step-primary]="sutepuNo >= 1">1. ファイルアップロード</li>
+    <li class="step" [class.step-primary]="sutepuNo >= 2">2. 列紐付け</li>
+    <li class="step" [class.step-primary]="sutepuNo >= 3">3. プレビュー</li>
+    <li class="step" [class.step-primary]="sutepuNo >= 4">4. 取り込み開始</li>
+  </ul>
+
+  <section class="card bg-base-100 border border-base-300">
+    <div class="card-body">
+      <ng-container [ngSwitch]="sutepuNo">
+        <div *ngSwitchCase="1" class="step-body">
+          <h2 class="step-title">ステップ1: ファイルをアップロードする</h2>
+          <section class="sample-area">
+            <h3 class="text-sm font-semibold">CSVサンプル</h3>
+            <p class="text-xs text-slate-500">下のカードをドラッグしてドロップゾーンへドロップすると、D&Dをエミュレートできます。</p>
+            <div class="sample-fairu" draggable="true" (dragstart)="onSampleDragStart($event)">
+              <span class="badge badge-primary badge-sm">CSV</span>
+              <span>{{ sampleFairuMei }}</span>
+              <button type="button" class="btn btn-xs btn-outline" (click)="torikomiSampleCsv()">このサンプルを取り込む</button>
+            </div>
+            <pre class="sample-text">{{ sampleHyoiLineList.join('\n') }}</pre>
+          </section>
+          <label class="drop-zone" [class.drag-active]="dragActive" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+            <input type="file" class="file-input file-input-bordered w-full max-w-md" accept=".csv,.xlsx,.xls" (change)="onFairuSentaku($event)" />
+            <span>ここにファイルをドラッグ&ドロップ、または上のファイル選択で指定してください。</span>
+          </label>
+          <p *ngIf="fairuMei" class="text-sm">読込対象: {{ fairuMei }}</p>
+          <p *ngIf="eraaMessage" class="text-error">{{ eraaMessage }}</p>
+        </div>
+
+        <div *ngSwitchCase="2" class="step-body">
+          <h2 class="step-title">ステップ2: 取り込み項目とファイル項目の紐づけ</h2>
+          <div class="himozuke-wrap">
+            <div class="himozuke-col" *ngFor="let settei of himozukeSetteiList">
+              <label class="font-semibold">{{ settei.torikomiLabel }}</label>
+              <select class="select select-sm select-bordered" [(ngModel)]="settei.fairuKamoku">
+                <option value="">未選択</option>
+                <option *ngFor="let kamoku of fairuKamokuList" [value]="kamoku">{{ kamoku }}</option>
+              </select>
+              <div class="syoTo-preview">
+                <p class="syoTo-title">先頭5行プレビュー</p>
+                <p class="syoTo-empty" *ngIf="!settei.fairuKamoku">項目を選択してください</p>
+                <ol *ngIf="settei.fairuKamoku">
+                  <li *ngFor="let value of getSyoTo5GyoValueList(settei.fairuKamoku)">{{ value }}</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="3" class="step-body">
+          <h2 class="step-title">ステップ3: 取り込み内容のプレビュー</h2>
+          <p class="text-sm mb-2">セルは直接編集できます。</p>
+          <ag-grid-angular
+            class="ag-theme-balham purebyu-grid"
+            [columnDefs]="purebyuColDefs"
+            [rowData]="purebyuGyoList"
+            [defaultColDef]="{ resizable: true, sortable: true, filter: true, editable: true, suppressPaste: false }"
+            [localeText]="localeText"
+            [enableRangeSelection]="true"
+            [suppressRowClickSelection]="true"
+          ></ag-grid-angular>
+        </div>
+
+        <div *ngSwitchCase="4" class="step-body">
+          <h2 class="step-title">ステップ4: 取り込みを開始する</h2>
+          <p>{{ purebyuGyoList.length }}件を取り込みます。</p>
+          <button class="btn btn-primary" type="button" (click)="startTorikomi()">取り込み開始</button>
+        </div>
+      </ng-container>
+    </div>
+  </section>
+
+  <footer class="step-actions">
+    <button class="btn" type="button" (click)="goPrev()" [disabled]="sutepuNo <= 1">戻る</button>
+    <button class="btn btn-primary" type="button" (click)="goNext()" *ngIf="sutepuNo < 4"
+      [disabled]="(sutepuNo === 1 && !canGoStep2()) || (sutepuNo === 2 && !canGoStep3()) || (sutepuNo === 3 && !canGoStep4())">
+      次へ
+    </button>
+  </footer>
+</section>

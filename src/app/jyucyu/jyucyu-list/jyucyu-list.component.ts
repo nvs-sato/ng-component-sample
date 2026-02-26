@@ -391,6 +391,11 @@ export class JyucyuListComponent implements OnInit {
     this.router.navigate(['/jyucyu/register']);
   }
 
+  // 一括登録ボタン押下時に一括登録画面へ遷移
+  moveToIkkatsu(): void {
+    this.router.navigate(['/jyucyu/ikkatsu']);
+  }
+
   exportAsExcelTable(): void {
     if (!this.gridApi) {
       return;

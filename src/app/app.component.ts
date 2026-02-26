@@ -39,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     const labels: Record<string, string> = {
       jyucyu: '受注',
       list: '受注一覧',
-      register: '受注登録'
+      register: '受注登録',
+      ikkatsu: '受注一括登録'
     };
 
     let currentPath = '';
