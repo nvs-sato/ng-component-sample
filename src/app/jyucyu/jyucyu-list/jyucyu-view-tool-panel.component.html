@@ -1,6 +1,60 @@
-<section class="view-tool-panel">
-  <h3>ビュー</h3>
-  <p>表示列の状態を切り替えます。</p>
-  <button type="button" class="btn btn-sm btn-outline" (click)="modosiHyojunView()">標準ビューに戻す</button>
-  <button type="button" class="btn btn-sm" (click)="hyojiColSubete()">全列を表示</button>
+﻿<section class="view-kanri">
+  <header class="kanri-head">
+    <h3>ビュー管理</h3>
+  </header>
+
+  <section class="hozon-block">
+    <p class="block-title">現在の状態を保存</p>
+    <input
+      class="input input-bordered input-sm"
+      type="text"
+      placeholder="ビュー名を入力"
+      [(ngModel)]="viewMeiNyuryoku"
+    />
+    <button type="button" class="btn btn-primary btn-sm" (click)="hozonGenzaiView()" [disabled]="!viewMeiNyuryoku.trim()">
+      保存
+    </button>
+  </section>
+
+  <section class="list-block">
+    <p class="block-title">保存済みビュー</p>
+
+    <div
+      class="view-item default-item"
+      [class.sentaku]="sentakuViewId === 'default'"
+      (click)="tekiyoView('default')"
+    >
+      <span class="mei">デフォルトビュー</span>
+    </div>
+
+    <div
+      class="view-item"
+      *ngFor="let item of viewHozonList"
+      [class.sentaku]="sentakuViewId === item.id"
+      (click)="tekiyoView(item.id)"
+    >
+      <ng-container *ngIf="hensyuViewId !== item.id; else hensyuMode">
+        <span class="mei">{{ item.mei }}</span>
+        <div class="item-actions">
+          <button type="button" class="btn btn-ghost btn-xs" (click)="kaisiHensyu(item, $event)">編集</button>
+          <button type="button" class="btn btn-ghost btn-xs" (click)="sakujoView(item.id, $event)">削除</button>
+        </div>
+      </ng-container>
+
+      <ng-template #hensyuMode>
+        <input
+          type="text"
+          class="input input-bordered input-xs hensyu-input"
+          [(ngModel)]="hensyuMeiNyuryoku"
+          (click)="$event.stopPropagation()"
+        />
+        <div class="item-actions">
+          <button type="button" class="btn btn-ghost btn-xs" (click)="hozonHensyu($event)">保存</button>
+          <button type="button" class="btn btn-ghost btn-xs" (click)="torikesiHensyu($event)">取消</button>
+        </div>
+      </ng-template>
+    </div>
+
+    <p class="none-text" *ngIf="!viewHozonList.length">保存済みビューはありません。</p>
+  </section>
 </section>

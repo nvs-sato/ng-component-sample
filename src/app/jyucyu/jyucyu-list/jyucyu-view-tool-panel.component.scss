@@ -1,17 +1,73 @@
-.view-tool-panel {
-  padding: 12px;
+﻿.view-kanri {
+  padding: 10px;
   display: grid;
-  gap: 8px;
+  gap: 14px;
 }
 
-.view-tool-panel h3 {
+.kanri-head h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
 }
 
-.view-tool-panel p {
+.hozon-block,
+.list-block {
+  display: grid;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.block-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.view-item {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.view-item:hover {
+  background: #f8fafc;
+}
+
+.view-item.sentaku {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.default-item {
+  font-weight: 600;
+}
+
+.mei {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.hensyu-input {
+  min-width: 120px;
+  flex: 1;
+}
+
+.none-text {
   margin: 0;
   font-size: 12px;
-  color: #64748b;
+  color: #94a3b8;
 }
