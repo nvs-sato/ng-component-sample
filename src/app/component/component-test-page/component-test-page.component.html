@@ -6,7 +6,7 @@
       <h2>{{ hyojiTitle }}</h2>
       <p>このページで Angular コンポーネントの動作確認を行います。</p>
 
-      <ng-container *ngIf="shubetu === 'date-input'; else sonota">
+      <ng-container *ngIf="shubetu === 'date-input'; else nengetsuOrSonota">
         <div class="date-test-wrap">
           <nvs-input-date
             [isRequired]="true"
@@ -25,6 +25,28 @@
           <p class="text-xs text-slate-500">キー操作: ↑/↓ 日付変更, F4 カレンダー開閉</p>
         </div>
       </ng-container>
+
+      <ng-template #nengetsuOrSonota>
+        <ng-container *ngIf="shubetu === 'year-month-input'; else sonota">
+          <div class="date-test-wrap">
+            <nvs-input-year-month
+              [isRequired]="true"
+              [placeholder]="'yyyy/MM'"
+              [minDate]="'2025/01/01'"
+              [maxDate]="'2027/12/31'"
+              [formControl]="yearMonthControl"
+              (initialized)="onInitialized()"
+              (valueChanged)="onValueChanged($event)"
+              (gotFocus)="onGotFocus()"
+              (lostFocus)="onLostFocus()"
+            ></nvs-input-year-month>
+
+            <p class="text-sm">FormControl値: {{ yearMonthControlHyojiText }}</p>
+            <p class="text-sm">最新イベント: {{ saishinEvent }}</p>
+            <p class="text-xs text-slate-500">キー操作: ↑/↓ 月変更, F4/Alt+↓ 年月ピッカー開閉</p>
+          </div>
+        </ng-container>
+      </ng-template>
 
       <ng-template #sonota>
         <p class="text-sm">この種類のコンポーネントは後続で実装予定です。</p>
