@@ -13,34 +13,44 @@
       (blur)="onBlur()"
       (keydown)="onKeyDown($event)"
     />
-    <button
-      type="button"
-      class="picker-icon-btn"
-      tabindex="-1"
-      [disabled]="isDisabled || isReadOnly"
-      (click)="togglePicker()"
-      (keydown)="onKeyDown($event)"
-      aria-label="年月選択を開く"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="picker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-    </button>
+
+    <div class="month-control-wrap">
+      <button type="button" class="month-control-btn" [disabled]="isDisabled || isReadOnly" (click)="onClickPrevMonth()" (keydown)="onKeyDown($event)" aria-label="前月へ">
+        ◀
+      </button>
+      <button type="button" class="month-control-btn" [disabled]="isDisabled || isReadOnly" (click)="onClickNowMonth()" (keydown)="onKeyDown($event)" aria-label="今月へ">
+        ●
+      </button>
+      <button type="button" class="month-control-btn" [disabled]="isDisabled || isReadOnly" (click)="onClickNextMonth()" (keydown)="onKeyDown($event)" aria-label="翌月へ">
+        ▶
+      </button>
+    </div>
   </div>
 
   <div class="picker-pop card bg-base-100 border border-base-300" *ngIf="pickerOpen">
     <div class="card-body p-3">
-      <div class="picker-row">
-        <select class="select select-sm select-bordered" [(ngModel)]="sentakuYear" (ngModelChange)="onChangeYear($event)" (keydown)="onKeyDown($event)">
-          <option *ngFor="let year of yearList" [ngValue]="year">{{ year }}</option>
-        </select>
-        <span class="separator">/</span>
-        <select class="select select-sm select-bordered" [(ngModel)]="sentakuMonth" (ngModelChange)="onChangeMonth($event)" (keydown)="onKeyDown($event)">
-          <option *ngFor="let month of monthList" [ngValue]="month">{{ month }}</option>
-        </select>
+      <div class="year-header-wrap">
+        <button type="button" class="year-header-btn" [disabled]="!canShiftYear(-1)" (click)="onClickPrevYear()" (keydown)="onKeyDown($event)" aria-label="前年へ">
+          ◀
+        </button>
+        <div class="year-label">{{ sentakuYear }}</div>
+        <button type="button" class="year-header-btn" [disabled]="!canShiftYear(1)" (click)="onClickNextYear()" (keydown)="onKeyDown($event)" aria-label="翌年へ">
+          ▶
+        </button>
+      </div>
+
+      <div class="month-grid">
+        <button
+          type="button"
+          class="month-grid-btn"
+          *ngFor="let month of monthItems"
+          [class.is-selected]="month === sentakuMonth"
+          [disabled]="isMonthDisabled(month)"
+          (click)="onSelectMonth(month)"
+          (keydown)="onKeyDown($event)"
+        >
+          {{ month }}
+        </button>
       </div>
     </div>
   </div>

@@ -132,7 +132,7 @@ export class NvsInputYearMonthComponent implements ControlValueAccessor, OnInit,
 
     if ((event.altKey && event.key === 'ArrowDown') || event.key === 'F4') {
       event.preventDefault();
-      this.togglePicker();
+      this.openPickerByKeyboard();
       return;
     }
 
@@ -148,40 +148,75 @@ export class NvsInputYearMonthComponent implements ControlValueAccessor, OnInit,
     }
   }
 
-  togglePicker(): void {
+  openPickerByKeyboard(): void {
     if (this.isDisabled || this.isReadOnly) {
       return;
     }
-
-    this.pickerOpen = !this.pickerOpen;
-    const base = this.internalValue ?? new Date();
-    this.sentakuYear = base.getFullYear();
-    this.sentakuMonth = base.getMonth() + 1;
+    const kijunDate = this.internalValue ?? new Date();
+    this.openPicker(kijunDate);
   }
 
-  get yearList(): number[] {
-    const base = this.internalValue?.getFullYear() ?? new Date().getFullYear();
-    return Array.from({ length: 21 }, (_, i) => base - 10 + i);
+  // 画像仕様の3ボタン操作: 表示年月から1か月戻す。
+  onClickPrevMonth(): void {
+    if (this.isDisabled || this.isReadOnly) {
+      return;
+    }
+    this.shiftMonth(-1);
+    this.openPicker(this.internalValue ?? new Date());
   }
 
-  get monthList(): number[] {
+  // 画像仕様の3ボタン操作: 現在年月を反映する。
+  onClickNowMonth(): void {
+    if (this.isDisabled || this.isReadOnly) {
+      return;
+    }
+    const now = new Date();
+    this.setInternalValue(this.buildDate(now.getFullYear(), now.getMonth() + 1), true);
+    this.openPicker(this.internalValue ?? now);
+  }
+
+  // 画像仕様の3ボタン操作: 表示年月から1か月進める。
+  onClickNextMonth(): void {
+    if (this.isDisabled || this.isReadOnly) {
+      return;
+    }
+    this.shiftMonth(1);
+    this.openPicker(this.internalValue ?? new Date());
+  }
+
+  // パネル上で月を選択したら即時反映して閉じる。
+  onSelectMonth(month: number): void {
+    if (this.isMonthDisabled(month)) {
+      return;
+    }
+    this.sentakuMonth = month;
+    this.setInternalValue(this.buildDate(this.sentakuYear, month), true);
+    this.pickerOpen = false;
+  }
+
+  // テンプレートから参照するため、選択中年の月の活性判定を公開する。
+  isMonthDisabled(month: number): boolean {
+    const target = this.buildDate(this.sentakuYear, month);
+    return !target;
+  }
+
+  get monthItems(): number[] {
     return Array.from({ length: 12 }, (_, i) => i + 1);
   }
 
-  // 年変更はイベント引数の値を優先して内部状態へ反映する。
-  onChangeYear(year: number): void {
-    this.sentakuYear = Number(year);
-    this.onChangeYearMonth();
+  // 年ヘッダ左ボタン: 1年戻す（範囲外なら無効）。
+  onClickPrevYear(): void {
+    this.shiftYear(-1);
   }
 
-  // 月変更はイベント引数の値を優先して内部状態へ反映する。
-  onChangeMonth(month: number): void {
-    this.sentakuMonth = Number(month);
-    this.onChangeYearMonth();
+  // 年ヘッダ右ボタン: 1年進める（範囲外なら無効）。
+  onClickNextYear(): void {
+    this.shiftYear(1);
   }
 
-  private onChangeYearMonth(): void {
-    this.setInternalValue(this.buildDate(this.sentakuYear, this.sentakuMonth), true);
+  // 年移動ボタンの活性判定。
+  canShiftYear(diff: number): boolean {
+    return !!this.buildDate(this.sentakuYear + diff, this.sentakuMonth);
   }
 
   @HostListener('document:mousedown', ['$event'])
@@ -199,6 +234,23 @@ export class NvsInputYearMonthComponent implements ControlValueAccessor, OnInit,
     const base = this.internalValue ?? new Date();
     const moved = new Date(base.getFullYear(), base.getMonth() + diff, 1, 12, 0, 0, 0);
     this.setInternalValue(moved, true);
+  }
+
+  // パネル表示中の年切替は、現在月が有効な年にだけ移動する。
+  private shiftYear(diff: number): void {
+    const nextYear = this.sentakuYear + diff;
+    const target = this.buildDate(nextYear, this.sentakuMonth);
+    if (!target) {
+      return;
+    }
+    // 年変更も月変更と同様にControlValueAccessor経由で反映する。
+    this.setInternalValue(target, true);
+  }
+
+  private openPicker(base: Date): void {
+    this.pickerOpen = true;
+    this.sentakuYear = base.getFullYear();
+    this.sentakuMonth = base.getMonth() + 1;
   }
 
   private setInternalValue(value: Date | null, notify: boolean): void {

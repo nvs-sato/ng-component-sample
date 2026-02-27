@@ -28,25 +28,25 @@ describe('NvsInputYearMonthComponent', () => {
     comp = fixture.debugElement.query(By.directive(NvsInputYearMonthComponent)).componentInstance as NvsInputYearMonthComponent;
   });
 
-  it('年変更時にinputが空欄にならずDateが保持される', () => {
-    comp.togglePicker();
+  it('month select updates input and FormControl', () => {
+    comp.openPickerByKeyboard();
     fixture.detectChanges();
 
-    comp.onChangeYear(2027);
+    comp.onSelectMonth(11);
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
-    expect(input.value).toBe('2027/02');
+    expect(input.value).toBe('2026/11');
 
     const value = host.nengetsuCtrl.value as Date;
     expect(value instanceof Date).toBeTrue();
-    expect(value.getFullYear()).toBe(2027);
-    expect(value.getMonth()).toBe(1);
+    expect(value.getFullYear()).toBe(2026);
+    expect(value.getMonth()).toBe(10);
     expect(value.getDate()).toBe(1);
   });
 
-  it('年月ピッカー表示中にEscで閉じる', () => {
-    comp.togglePicker();
+  it('Escape closes picker', () => {
+    comp.openPickerByKeyboard();
     fixture.detectChanges();
     expect(comp.pickerOpen).toBeTrue();
 
@@ -55,5 +55,23 @@ describe('NvsInputYearMonthComponent', () => {
     fixture.detectChanges();
 
     expect(comp.pickerOpen).toBeFalse();
+  });
+
+  it('year header buttons switch year', () => {
+    comp.openPickerByKeyboard();
+    fixture.detectChanges();
+    expect(comp.sentakuYear).toBe(2026);
+
+    comp.onClickNextYear();
+    fixture.detectChanges();
+    expect(comp.sentakuYear).toBe(2027);
+    expect(host.nengetsuCtrl.value?.getFullYear()).toBe(2027);
+    expect(host.nengetsuCtrl.value?.getMonth()).toBe(1);
+
+    comp.onClickPrevYear();
+    fixture.detectChanges();
+    expect(comp.sentakuYear).toBe(2026);
+    expect(host.nengetsuCtrl.value?.getFullYear()).toBe(2026);
+    expect(host.nengetsuCtrl.value?.getMonth()).toBe(1);
   });
 });

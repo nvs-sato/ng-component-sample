@@ -7,33 +7,47 @@
 }
 
 .input-wrap {
-  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
 }
 
 .ym-input {
-  width: 100%;
-  padding-right: 40px;
+  width: 120px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.picker-icon-btn {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+.month-control-wrap {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid #a8a29e;
+  border-left: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  overflow: hidden;
+}
+
+.month-control-btn {
+  min-width: 28px;
   border: 0;
-  background: transparent;
-  border-radius: 4px;
+  background: #f3f4f6;
+  color: #374151;
+  cursor: pointer;
 }
 
-.picker-icon-btn:hover:not(:disabled) {
-  background: #e2e8f0;
+.month-control-btn + .month-control-btn {
+  border-left: 1px solid #d1d5db;
 }
 
-.picker-icon {
-  width: 16px;
-  height: 16px;
+.month-control-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.month-control-btn:disabled {
+  cursor: not-allowed;
+  color: #9ca3af;
+  background: #f9fafb;
 }
 
 .picker-pop {
@@ -41,20 +55,73 @@
   z-index: 40;
   top: calc(100% + 6px);
   left: 0;
-  width: 260px;
+  width: 340px;
 }
 
-.picker-row {
+.year-header-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #e5e7eb;
+  margin-bottom: 8px;
+  padding: 2px 6px;
+}
+
+.year-header-btn {
+  min-width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.year-header-btn:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.year-header-btn:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.year-label {
+  min-width: 64px;
+  text-align: center;
+  color: #374151;
+  font-weight: 600;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
-.picker-row .select {
-  min-width: 96px;
+.month-grid-btn {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 8px 0;
+  cursor: pointer;
 }
 
-.separator {
-  color: #64748b;
-  user-select: none;
+.month-grid-btn:hover:not(:disabled) {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.month-grid-btn.is-selected:not(:disabled) {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.month-grid-btn:disabled {
+  cursor: not-allowed;
+  color: #9ca3af;
+  background: #f3f4f6;
 }
