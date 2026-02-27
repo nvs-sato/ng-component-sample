@@ -1,0 +1,96 @@
+:host {
+  display: block;
+}
+
+.nvs-multi-auto {
+  position: relative;
+  width: 100%;
+  font-size: 14px;
+}
+
+.nvs-field {
+  min-height: 40px;
+  width: 100%;
+  border: 1px solid #9ca3af;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+}
+
+.nvs-field:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+.nvs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #1f2937;
+  max-width: 100%;
+}
+
+.nvs-chip-text {
+  white-space: nowrap;
+}
+
+.nvs-chip-remove {
+  border: none;
+  background: transparent;
+  color: #334155;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.nvs-input {
+  flex: 1 1 140px;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  padding: 2px 4px;
+  background: transparent;
+}
+
+.nvs-kouho-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  z-index: 30;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+}
+
+.nvs-kouho-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.nvs-kouho-item:hover,
+.nvs-kouho-item.nvs-active {
+  background: #dbeafe;
+}
+
+.nvs-disabled .nvs-field,
+.nvs-readonly .nvs-field {
+  background: #f1f5f9;
+}
+
+.nvs-disabled .nvs-chip-remove,
+.nvs-readonly .nvs-chip-remove {
+  display: none;
+}

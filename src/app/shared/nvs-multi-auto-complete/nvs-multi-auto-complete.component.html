@@ -1,0 +1,40 @@
+<div class="nvs-multi-auto" [class.nvs-disabled]="isDisabled" [class.nvs-readonly]="isReadOnly">
+  <div class="nvs-field" (click)="onClickField()">
+    <span class="nvs-chip" *ngFor="let sentaku of sentakuSumiList; trackBy: trackBySentaku">
+      <span class="nvs-chip-text">{{ getDisplayText(sentaku) }}</span>
+      <button
+        *ngIf="!isDisabled && !isReadOnly"
+        type="button"
+        class="nvs-chip-remove"
+        (click)="removeSentaku(sentaku)"
+        aria-label="選択解除"
+      >
+        ×
+      </button>
+    </span>
+
+    <input
+      #nyuryokuRef
+      type="text"
+      class="nvs-input"
+      [value]="nyuryokuText"
+      [placeholder]="hasSentakuMax ? '' : placeholder"
+      [disabled]="isDisabled || isReadOnly || hasSentakuMax"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
+    />
+  </div>
+
+  <ul class="nvs-kouho-list" *ngIf="panelOpen">
+    <li
+      *ngFor="let kouho of hyojiKouhoList; let i = index; trackBy: trackBySentaku"
+      class="nvs-kouho-item"
+      [class.nvs-active]="i === activeIndex"
+      (mousedown)="onMouseDownKouho($event, kouho)"
+    >
+      {{ getDisplayText(kouho) }}
+    </li>
+  </ul>
+</div>

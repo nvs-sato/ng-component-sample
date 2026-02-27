@@ -6,7 +6,7 @@
       <h2>{{ hyojiTitle }}</h2>
       <p>このページで Angular コンポーネントの動作確認を行います。</p>
 
-      <ng-container *ngIf="shubetu === 'date-input'; else nengetsuOrPopupOrSonota">
+      <ng-container *ngIf="shubetu === 'date-input'; else nengetsuOrMultiOrPopupOrSonota">
         <div class="date-test-wrap">
           <nvs-input-date
             [isRequired]="true"
@@ -26,8 +26,8 @@
         </div>
       </ng-container>
 
-      <ng-template #nengetsuOrPopupOrSonota>
-        <ng-container *ngIf="shubetu === 'year-month-input'; else popupOrSonota">
+      <ng-template #nengetsuOrMultiOrPopupOrSonota>
+        <ng-container *ngIf="shubetu === 'year-month-input'; else multiOrPopupOrSonota">
           <div class="date-test-wrap">
             <nvs-input-year-month
               [isRequired]="true"
@@ -44,6 +44,30 @@
             <p class="text-sm">FormControl値: {{ yearMonthControlHyojiText }}</p>
             <p class="text-sm">最新イベント: {{ saishinEvent }}</p>
             <p class="text-xs text-slate-500">キー操作: ↑/↓ 月変更, F4/Alt+↓ 年月ピッカー開閉</p>
+          </div>
+        </ng-container>
+      </ng-template>
+
+      <ng-template #multiOrPopupOrSonota>
+        <ng-container *ngIf="shubetu === 'multi-auto-complete'; else popupOrSonota">
+          <div class="date-test-wrap">
+            <nvs-multi-auto-complete
+              [placeholder]="'商品名 / 商品コードで検索'"
+              [kouhoList]="shohinKouhoList"
+              [displayMemberPath]="'mei'"
+              [searchMemberPath]="['cd', 'mei', 'yomi']"
+              [selectedValuePath]="'cd'"
+              [maxSentakuCount]="5"
+              [formControl]="multiAutoControl"
+              (initialized)="onInitialized()"
+              (valueChanged)="onMultiAutoValueChanged($event)"
+              (gotFocus)="onGotFocus()"
+              (lostFocus)="onLostFocus()"
+            ></nvs-multi-auto-complete>
+
+            <p class="text-sm">FormControl値: {{ multiAutoControlHyojiText }}</p>
+            <p class="text-sm">最新イベント: {{ saishinEvent }}</p>
+            <p class="text-xs text-slate-500">キー操作: ↑/↓ 候補移動, Enter 選択, Backspace 末尾チップ削除</p>
           </div>
         </ng-container>
       </ng-template>

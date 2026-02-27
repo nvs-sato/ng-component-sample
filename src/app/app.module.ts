@@ -15,6 +15,7 @@ import { TorihikisakiMasterComponent } from './master/torihikisaki-master/torihi
 import { NvsInputDateComponent } from './shared/nvs-input-date/nvs-input-date.component';
 import { NvsPopupHostComponent } from './shared/nvs-popup/nvs-popup-host/nvs-popup-host.component';
 import { NvsInputYearMonthComponent } from './shared/nvs-input-year-month/nvs-input-year-month.component';
+import { NvsMultiAutoCompleteComponent } from './shared/nvs-multi-auto-complete/nvs-multi-auto-complete.component';
 import { TorihikisakiLinkCellRendererComponent } from './shared/torihikisaki-link-cell-renderer/torihikisaki-link-cell-renderer.component';
 import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihikisaki-popup.component';
 
@@ -30,6 +31,7 @@ import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihiki
     TorihikisakiMasterComponent,
     NvsInputDateComponent,
     NvsInputYearMonthComponent,
+    NvsMultiAutoCompleteComponent,
     NvsPopupHostComponent,
     TorihikisakiLinkCellRendererComponent,
     TorihikisakiPopupComponent

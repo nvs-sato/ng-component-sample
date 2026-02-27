@@ -10,6 +10,12 @@ interface KomponentoMenuItem {
   label: string;
 }
 
+interface ShohinModel {
+  cd: string;
+  mei: string;
+  yomi?: string;
+}
+
 @Component({
   selector: 'app-component-test-page',
   templateUrl: './component-test-page.component.html',
@@ -24,6 +30,17 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
   popupResult = '';
   dateControl = new FormControl<Date | null>(new Date(2026, 1, 26));
   yearMonthControl = new FormControl<Date | null>(new Date(2026, 1, 1));
+  multiAutoControl = new FormControl<string[]>([]);
+  readonly shohinKouhoList: ShohinModel[] = [
+    { cd: 'SH-001', mei: 'ボールペン 0.5mm', yomi: 'ぼーるぺん' },
+    { cd: 'SH-002', mei: 'ボールペン 0.7mm', yomi: 'ぼーるぺん' },
+    { cd: 'SH-003', mei: 'シャープペン 0.5mm', yomi: 'しゃーぷぺん' },
+    { cd: 'SH-004', mei: '消しゴム', yomi: 'けしごむ' },
+    { cd: 'SH-005', mei: 'ノート B5', yomi: 'のーと' },
+    { cd: 'SH-006', mei: 'ノート A4', yomi: 'のーと' },
+    { cd: 'SH-007', mei: 'ふせん 75x75', yomi: 'ふせん' },
+    { cd: 'SH-008', mei: 'クリアファイル', yomi: 'くりあふぁいる' }
+  ];
 
   readonly menuItemList: KomponentoMenuItem[] = [
     { path: 'date-input', label: '日付入力' },
@@ -61,6 +78,12 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
     this.saishinEvent = `valueChanged: ${value ? value.toISOString().slice(0, 10) : 'null'}`;
   }
 
+  onMultiAutoValueChanged(value: unknown[]): void {
+    // selectedValuePath=cd のため、イベント値は商品コード配列となる。
+    const cdList = value.map((item) => String(item)).join(', ');
+    this.saishinEvent = `valueChanged: ${value.length}件 [${cdList}]`;
+  }
+
   onGotFocus(): void {
     this.saishinEvent = 'gotFocus';
   }
@@ -89,6 +112,14 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
     const mm = String(value.getMonth() + 1).padStart(2, '0');
     const dd = String(value.getDate()).padStart(2, '0');
     return `${yyyy}/${mm}/${dd}`;
+  }
+
+  get multiAutoControlHyojiText(): string {
+    const value = this.multiAutoControl.value ?? [];
+    if (value.length === 0) {
+      return '(未選択)';
+    }
+    return value.join(' / ');
   }
 
   openDemoPopup(): void {
