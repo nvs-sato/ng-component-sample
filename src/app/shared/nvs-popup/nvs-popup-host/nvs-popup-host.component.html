@@ -1,4 +1,4 @@
-﻿<div class="modal" [class.modal-open]="isOpen" (click)="onClickBackdrop()">
+﻿<div class="modal" [class.modal-open]="isOpen" (click)="onClickBackdrop($event)">
   <div class="popup-layer-wrap">
     <div
       class="modal-box popup-box"
@@ -41,3 +41,4 @@
     </div>
   </div>
 </div>
+

@@ -86,7 +86,12 @@ export class NvsPopupHostComponent implements AfterViewInit, OnDestroy {
     return naiyo.request.options.actions ?? [];
   }
 
-  onClickBackdrop(): void {
+  onClickBackdrop(event: MouseEvent): void {
+    // 背景そのものをクリックした場合のみ閉じる（内部クリックの誤判定を防止）
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     const saijoNaiyo = this.getSaijoNaiyo();
     if (!saijoNaiyo) {
       return;

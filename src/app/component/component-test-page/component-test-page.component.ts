@@ -92,11 +92,12 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
   }
 
   openDemoPopup(): void {
+    // ポップアップ内からさらにポップアップを開く検証用に、階層データを初期化する
     const handle = this.popupService.open(PopupDemoContentComponent, {
       title: 'ポップアップサンプル',
       closeOnBackdrop: true,
       showCloseButton: true,
-      data: { popupCd: 'P-001', title: '初期データ' },
+      data: { popupCd: 'P-001', title: '初期データ', fukasa: 1 },
       componentInputs: { inputMessage: '初期メッセージ' },
       actions: [
         { id: 'cancel', label: '閉じる', className: 'btn-outline' },

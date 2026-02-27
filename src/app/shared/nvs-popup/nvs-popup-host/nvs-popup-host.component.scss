@@ -18,7 +18,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, calc(-50% + var(--popup-index, 0) * 16px));
+  transform: translate(-50%, calc(-50% + var(--popup-index, 0) * -4px));
   z-index: calc(10 + var(--popup-index, 0));
   opacity: 1;
 }
@@ -35,22 +35,22 @@
 @keyframes popup-close {
   from {
     opacity: 1;
-    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * 16px)) scale(1);
+    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * -4px)) scale(1);
   }
   to {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * 16px + 8px)) scale(0.98);
+    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * -4px + 8px)) scale(0.98);
   }
 }
 
 @keyframes popup-close-esc {
   from {
     opacity: 1;
-    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * 16px)) scale(1);
+    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * -4px)) scale(1);
   }
   to {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * 16px + 4px)) scale(0.99);
+    transform: translate(-50%, calc(-50% + var(--popup-index, 0) * -4px + 4px)) scale(0.99);
   }
 }
 

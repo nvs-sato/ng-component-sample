@@ -52,6 +52,7 @@
         <ng-container *ngIf="shubetu === 'popup'; else sonota">
           <div class="date-test-wrap">
             <button type="button" class="btn btn-primary btn-sm" (click)="openDemoPopup()">ポップアップを開く</button>
+            <p class="text-xs text-slate-500">開いたポップアップ内の「子ポップアップを開く」で多重表示を確認できます。</p>
             <p class="text-sm">結果: {{ popupResult || '(未実行)' }}</p>
           </div>
         </ng-container>
