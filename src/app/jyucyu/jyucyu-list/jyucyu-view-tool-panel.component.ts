@@ -15,6 +15,7 @@ type HyojiThemeId = 'compact' | 'modern' | 'classic-like';
 interface JyucyuViewToolPanelParams extends IToolPanelParams<SalesRow> {
   getHyojiThemeId?: () => HyojiThemeId;
   onChangeHyojiTheme?: (themeId: HyojiThemeId) => void;
+  hozonKey?: string;
 }
 
 @Component({
@@ -23,9 +24,11 @@ interface JyucyuViewToolPanelParams extends IToolPanelParams<SalesRow> {
   styleUrls: ['./jyucyu-view-tool-panel.component.scss']
 })
 export class JyucyuViewToolPanelComponent implements IToolPanelAngularComp {
-  private static readonly HOZON_KEY = 'jyucyuListViewHozonV1';
+  private static readonly DEFAULT_HOZON_KEY = 'jyucyuListViewHozonV1';
 
   private params: JyucyuViewToolPanelParams | null = null;
+  // 画面ごとにビュー保存先を分離できるよう、キーはパラメータから受け取る。
+  private hozonKey = JyucyuViewToolPanelComponent.DEFAULT_HOZON_KEY;
 
   viewMeiNyuryoku = '';
   viewHozonList: ViewHozonItem[] = [];
@@ -41,12 +44,14 @@ export class JyucyuViewToolPanelComponent implements IToolPanelAngularComp {
 
   agInit(params: IToolPanelParams<SalesRow>): void {
     this.params = params as JyucyuViewToolPanelParams;
+    this.hozonKey = this.params.hozonKey ?? JyucyuViewToolPanelComponent.DEFAULT_HOZON_KEY;
     this.loadViewHozon();
     this.hyojiThemeId = this.params.getHyojiThemeId?.() ?? 'compact';
   }
 
   refresh(params: IToolPanelParams<SalesRow>): boolean {
     this.params = params as JyucyuViewToolPanelParams;
+    this.hozonKey = this.params.hozonKey ?? JyucyuViewToolPanelComponent.DEFAULT_HOZON_KEY;
     this.loadViewHozon();
     this.hyojiThemeId = this.params.getHyojiThemeId?.() ?? 'compact';
     return true;
@@ -174,7 +179,7 @@ export class JyucyuViewToolPanelComponent implements IToolPanelAngularComp {
 
   private loadViewHozon(): void {
     try {
-      const raw = localStorage.getItem(JyucyuViewToolPanelComponent.HOZON_KEY);
+      const raw = localStorage.getItem(this.hozonKey);
       if (!raw) {
         this.viewHozonList = [];
         return;
@@ -189,7 +194,7 @@ export class JyucyuViewToolPanelComponent implements IToolPanelAngularComp {
 
   private saveViewHozon(): void {
     localStorage.setItem(
-      JyucyuViewToolPanelComponent.HOZON_KEY,
+      this.hozonKey,
       JSON.stringify(this.viewHozonList)
     );
   }

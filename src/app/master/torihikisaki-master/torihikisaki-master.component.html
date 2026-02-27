@@ -32,11 +32,12 @@
     </div>
 
     <ag-grid-angular
-      class="ag-theme-alpine torihikisaki-grid"
+      [class]="gridThemeClass"
       [columnDefs]="columnDefs"
       [rowData]="torihikisakiList"
       [defaultColDef]="defaultColDef"
       [localeText]="localeText"
+      [sideBar]="sideBar"
       [animateRows]="true"
       (gridReady)="onGridReady($event)"
       (modelUpdated)="onModelUpdated($event)"

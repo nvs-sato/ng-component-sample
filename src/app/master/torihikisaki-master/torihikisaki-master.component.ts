@@ -1,9 +1,18 @@
 import { Component } from '@angular/core';
-import { ColDef, ColGroupDef, GridApi, GridReadyEvent, ModelUpdatedEvent } from 'ag-grid-community';
+import {
+  ColDef,
+  ColGroupDef,
+  GridApi,
+  GridReadyEvent,
+  ModelUpdatedEvent,
+  SideBarDef
+} from 'ag-grid-community';
 import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
+import { JyucyuViewToolPanelComponent } from '../../jyucyu/jyucyu-list/jyucyu-view-tool-panel.component';
 
 type TorihikiKbn = '共通' | '得意先' | '仕入先' | '得意先/仕入先';
 type TorihikiKeitai = '現金' | '掛売' | '掛仕入' | '相殺';
+type HyojiThemeId = 'compact' | 'modern' | 'classic-like';
 
 type TorihikisakiRow = {
   torihikisakiCd: string;
@@ -30,11 +39,12 @@ export class TorihikisakiMasterComponent {
   hyojiKensu = 0;
 
   private gridApi: GridApi<TorihikisakiRow> | null = null;
+  private hyojiThemeId: HyojiThemeId = 'compact';
 
   // 画面仕様に合わせて、共通/得意先/仕入先で列グループを分ける。
   readonly columnDefs: Array<ColDef<TorihikisakiRow> | ColGroupDef<TorihikisakiRow>> = [
     {
-      headerName: '',
+      headerName: '共通',
       children: [
         { headerName: '取引先コード', field: 'torihikisakiCd', minWidth: 140 },
         { headerName: '取引先名', field: 'torihikisakiMei', minWidth: 220 },
@@ -70,6 +80,33 @@ export class TorihikisakiMasterComponent {
 
   readonly localeText: Record<string, string> = AG_GRID_LOCALE_JA_JP;
 
+  // 受注一覧と同様に、ビュー(テーマ)と列設定をサイドパネルから操作できるようにする。
+  readonly sideBar: SideBarDef = {
+    toolPanels: [
+      {
+        id: 'view',
+        labelDefault: 'ビュー',
+        labelKey: 'view',
+        iconKey: 'menu',
+        toolPanel: JyucyuViewToolPanelComponent,
+        toolPanelParams: {
+          // 取引先マスタ専用のキーで、他画面と保存ビューを混在させない。
+          hozonKey: 'torihikisakiMasterViewHozonV1',
+          getHyojiThemeId: () => this.hyojiThemeId,
+          onChangeHyojiTheme: (themeId: HyojiThemeId) => this.changeHyojiTheme(themeId)
+        }
+      },
+      {
+        id: 'columns',
+        labelDefault: '列',
+        labelKey: 'columns',
+        iconKey: 'columns',
+        toolPanel: 'agColumnsToolPanel'
+      }
+    ],
+    defaultToolPanel: 'view'
+  };
+
   // 一覧確認用のサンプルデータを固定で10件用意する。
   readonly torihikisakiList: TorihikisakiRow[] = [
     this.createRow('TRK-0001', '青葉商事株式会社', 'T1010000000001', '重点,関東', 'SKY-0001', '佐藤 花子', '掛売', 'SIR-0001', '高橋 健一', '掛仕入', '得意先/仕入先'),
@@ -83,6 +120,19 @@ export class TorihikisakiMasterComponent {
     this.createRow('TRK-0009', '南海メディカル', 'T1010000000009', '医療', 'SKY-0009', '森本 葵', '掛売', 'SIR-0009', '藤田 誠司', '相殺', '得意先/仕入先'),
     this.createRow('TRK-0010', '城南テクノ', 'T1010000000010', '保守', 'SKY-0010', '清水 遥', '現金', 'SIR-0010', '遠藤 大輔', '掛仕入', '得意先')
   ];
+
+  // サイドパネルの表示テーマ選択に応じてグリッドの見た目を切り替える。
+  get gridThemeClass(): string {
+    switch (this.hyojiThemeId) {
+      case 'modern':
+        return 'ag-theme-alpine torihikisaki-grid';
+      case 'classic-like':
+        return 'ag-theme-alpine ag-theme-likewijmo torihikisaki-grid';
+      case 'compact':
+      default:
+        return 'ag-theme-balham torihikisaki-grid';
+    }
+  }
 
   onGridReady(event: GridReadyEvent<TorihikisakiRow>): void {
     this.gridApi = event.api;
@@ -106,6 +156,10 @@ export class TorihikisakiMasterComponent {
     }
 
     this.gridApi.setQuickFilter(this.kensakuKeyword.trim());
+  }
+
+  private changeHyojiTheme(themeId: HyojiThemeId): void {
+    this.hyojiThemeId = themeId;
   }
 
   private createRow(

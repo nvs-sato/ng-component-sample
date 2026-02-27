@@ -168,6 +168,8 @@ export class JyucyuListComponent implements OnInit {
         iconKey: 'menu',
         toolPanel: JyucyuViewToolPanelComponent,
         toolPanelParams: {
+          // 画面ごとに保存ビューを分離するため、受注一覧専用キーを指定する。
+          hozonKey: 'jyucyuListViewHozonV1',
           getHyojiThemeId: () => this.hyojiThemeId,
           onChangeHyojiTheme: (themeId: HyojiThemeId) => this.changeHyojiTheme(themeId)
         }
