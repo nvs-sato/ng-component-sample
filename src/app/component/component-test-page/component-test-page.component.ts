@@ -2,6 +2,8 @@
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { NvsPopupService } from '../../shared/nvs-popup/nvs-popup.service';
+import { PopupDemoContentComponent } from './popup-demo-content.component';
 
 interface KomponentoMenuItem {
   path: string;
@@ -19,6 +21,7 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
   hyojiTitle = '';
   shubetu = '';
   saishinEvent = '';
+  popupResult = '';
   dateControl = new FormControl<Date | null>(new Date(2026, 1, 26));
   yearMonthControl = new FormControl<Date | null>(new Date(2026, 1, 1));
 
@@ -35,7 +38,7 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
     { path: 'popup', label: 'ポップアップ' }
   ];
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(private readonly route: ActivatedRoute, private readonly popupService: NvsPopupService) {}
 
   ngOnInit(): void {
     this.subscription.add(
@@ -86,5 +89,33 @@ export class ComponentTestPageComponent implements OnInit, OnDestroy {
     const mm = String(value.getMonth() + 1).padStart(2, '0');
     const dd = String(value.getDate()).padStart(2, '0');
     return `${yyyy}/${mm}/${dd}`;
+  }
+
+  openDemoPopup(): void {
+    const handle = this.popupService.open(PopupDemoContentComponent, {
+      title: 'ポップアップサンプル',
+      closeOnBackdrop: true,
+      showCloseButton: true,
+      data: { popupCd: 'P-001', title: '初期データ' },
+      componentInputs: { inputMessage: '初期メッセージ' },
+      actions: [
+        { id: 'cancel', label: '閉じる', className: 'btn-outline' },
+        { id: 'ok', label: 'OK', className: 'btn-primary' }
+      ],
+      onAction: ({ actionId, componentInstance, close }) => {
+        if (actionId === 'cancel') {
+          close();
+          return;
+        }
+        if (actionId === 'ok') {
+          const message = (componentInstance as PopupDemoContentComponent | null)?.inputMessage ?? '';
+          close({ message });
+        }
+      }
+    });
+
+    handle.afterClosed.then((result) => {
+      this.popupResult = JSON.stringify(result ?? null);
+    });
   }
 }

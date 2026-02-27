@@ -1,0 +1,43 @@
+﻿<div class="modal" [class.modal-open]="isOpen" (click)="onClickBackdrop()">
+  <div class="popup-layer-wrap">
+    <div
+      class="modal-box popup-box"
+      role="dialog"
+      aria-modal="true"
+      *ngFor="let layer of hyojiLayerList; let i = index"
+      [class.popup-top]="isTopLayer(i)"
+      [class.popup-closing]="layer.isHeisaji"
+      [class.popup-closing-esc]="layer.isHeisaji && layer.isEscHeisa"
+      [style.--popup-index]="i"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="popup-header">
+        <h3 class="font-bold text-lg">{{ layer.naiyo.request.options.title ?? '' }}</h3>
+        <button
+          *ngIf="layer.naiyo.request.options.showCloseButton !== false"
+          type="button"
+          class="btn btn-sm btn-circle btn-ghost"
+          (click)="onClickClose(layer.naiyo.ref)"
+        >
+          X
+        </button>
+      </header>
+
+      <section class="popup-body">
+        <ng-template #popupBodyHost></ng-template>
+      </section>
+
+      <footer class="popup-footer" *ngIf="getPopupActions(layer.naiyo).length">
+        <button
+          type="button"
+          class="btn btn-sm"
+          *ngFor="let action of getPopupActions(layer.naiyo)"
+          [ngClass]="action.className"
+          (click)="onClickAction(action.id, layer.naiyo.ref)"
+        >
+          {{ action.label }}
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>

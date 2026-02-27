@@ -6,7 +6,7 @@
       <h2>{{ hyojiTitle }}</h2>
       <p>このページで Angular コンポーネントの動作確認を行います。</p>
 
-      <ng-container *ngIf="shubetu === 'date-input'; else nengetsuOrSonota">
+      <ng-container *ngIf="shubetu === 'date-input'; else nengetsuOrPopupOrSonota">
         <div class="date-test-wrap">
           <nvs-input-date
             [isRequired]="true"
@@ -26,8 +26,8 @@
         </div>
       </ng-container>
 
-      <ng-template #nengetsuOrSonota>
-        <ng-container *ngIf="shubetu === 'year-month-input'; else sonota">
+      <ng-template #nengetsuOrPopupOrSonota>
+        <ng-container *ngIf="shubetu === 'year-month-input'; else popupOrSonota">
           <div class="date-test-wrap">
             <nvs-input-year-month
               [isRequired]="true"
@@ -44,6 +44,15 @@
             <p class="text-sm">FormControl値: {{ yearMonthControlHyojiText }}</p>
             <p class="text-sm">最新イベント: {{ saishinEvent }}</p>
             <p class="text-xs text-slate-500">キー操作: ↑/↓ 月変更, F4/Alt+↓ 年月ピッカー開閉</p>
+          </div>
+        </ng-container>
+      </ng-template>
+
+      <ng-template #popupOrSonota>
+        <ng-container *ngIf="shubetu === 'popup'; else sonota">
+          <div class="date-test-wrap">
+            <button type="button" class="btn btn-primary btn-sm" (click)="openDemoPopup()">ポップアップを開く</button>
+            <p class="text-sm">結果: {{ popupResult || '(未実行)' }}</p>
           </div>
         </ng-container>
       </ng-template>
