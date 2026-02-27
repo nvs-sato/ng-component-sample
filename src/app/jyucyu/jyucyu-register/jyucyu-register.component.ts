@@ -37,11 +37,20 @@ export class JyucyuRegisterComponent {
     this.detailRows = [...this.detailRows, this.createEmptyDetailRow(this.detailRows.length + 1)];
   }
 
+  // 行削除後も表示番号が崩れないように採番し直す。
+  removeDetailRow(rowNo: number): void {
+    const nokoriRows = this.detailRows.filter((row) => row.rowNo !== rowNo);
+    this.detailRows = nokoriRows.map((row, index) => ({
+      ...row,
+      rowNo: index + 1
+    }));
+  }
+
   private createEmptyDetailRow(rowNo: number): DetailRow {
     return {
       rowNo,
-      kubun: '定',
-      jyokyo: '',
+      kubun: '1:売上',
+      jyokyo: '出荷',
       syohinCd: '',
       syohinMei: '',
       irisu: null,

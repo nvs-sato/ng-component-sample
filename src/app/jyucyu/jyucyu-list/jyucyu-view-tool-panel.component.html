@@ -4,6 +4,22 @@
   </header>
 
   <section class="hozon-block">
+    <p class="block-title">表示テーマ</p>
+    <div class="theme-list">
+      <label class="theme-item" *ngFor="let item of hyojiThemeList">
+        <input
+          type="radio"
+          name="hyojiTheme"
+          [value]="item.id"
+          [ngModel]="hyojiThemeId"
+          (ngModelChange)="sentakuHyojiTheme($event)"
+        />
+        <span>{{ item.mei }}</span>
+      </label>
+    </div>
+  </section>
+
+  <section class="hozon-block">
     <p class="block-title">現在の状態を保存</p>
     <input
       class="input input-bordered input-sm"

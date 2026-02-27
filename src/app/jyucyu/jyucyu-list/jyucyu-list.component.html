@@ -25,7 +25,7 @@
   <p *ngIf="isLoading" class="loading-text">データを読み込み中です...</p>
 
   <ag-grid-angular
-    class="ag-theme-balham grid"
+    [class]="gridThemeClass"
     [columnDefs]="columnDefs"
     [rowData]="rowData"
     [defaultColDef]="defaultColDef"
@@ -45,10 +45,15 @@
     (rangeSelectionChanged)="onRangeSelectionChanged()"
     (rowDoubleClicked)="onRowDoubleClicked($event)"
     (cellKeyDown)="onCellKeyDown($event)"
+    [defaultCsvExportParams]="{
+      columnKeys: ['jyucyuNo', 'jyucyuDate']
+    }"
+    [defaultExcelExportParams]="{
+      columnKeys: ['jyucyuNo', 'jyucyuDate']
+    }"
   ></ag-grid-angular>
 </div>
 
 <app-torihikisaki-popup></app-torihikisaki-popup>
-
 
 

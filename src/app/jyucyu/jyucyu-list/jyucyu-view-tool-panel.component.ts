@@ -10,6 +10,13 @@ interface ViewHozonItem {
   hozonDateTime: string;
 }
 
+type HyojiThemeId = 'compact' | 'modern' | 'classic-like';
+
+interface JyucyuViewToolPanelParams extends IToolPanelParams<SalesRow> {
+  getHyojiThemeId?: () => HyojiThemeId;
+  onChangeHyojiTheme?: (themeId: HyojiThemeId) => void;
+}
+
 @Component({
   selector: 'app-jyucyu-view-tool-panel',
   templateUrl: './jyucyu-view-tool-panel.component.html',
@@ -18,23 +25,37 @@ interface ViewHozonItem {
 export class JyucyuViewToolPanelComponent implements IToolPanelAngularComp {
   private static readonly HOZON_KEY = 'jyucyuListViewHozonV1';
 
-  private params: IToolPanelParams<SalesRow> | null = null;
+  private params: JyucyuViewToolPanelParams | null = null;
 
   viewMeiNyuryoku = '';
   viewHozonList: ViewHozonItem[] = [];
   sentakuViewId = 'default';
   hensyuViewId = '';
   hensyuMeiNyuryoku = '';
+  hyojiThemeId: HyojiThemeId = 'compact';
+  readonly hyojiThemeList: Array<{ id: HyojiThemeId; mei: string }> = [
+    { id: 'compact', mei: 'コンパクト（デフォルト）' },
+    { id: 'modern', mei: 'モダン' },
+    { id: 'classic-like', mei: 'クラシックライク' }
+  ];
 
   agInit(params: IToolPanelParams<SalesRow>): void {
-    this.params = params;
+    this.params = params as JyucyuViewToolPanelParams;
     this.loadViewHozon();
+    this.hyojiThemeId = this.params.getHyojiThemeId?.() ?? 'compact';
   }
 
   refresh(params: IToolPanelParams<SalesRow>): boolean {
-    this.params = params;
+    this.params = params as JyucyuViewToolPanelParams;
     this.loadViewHozon();
+    this.hyojiThemeId = this.params.getHyojiThemeId?.() ?? 'compact';
     return true;
+  }
+
+  // サイドパネルで選択した表示テーマを親グリッドへ通知する。
+  sentakuHyojiTheme(themeId: HyojiThemeId): void {
+    this.hyojiThemeId = themeId;
+    this.params?.onChangeHyojiTheme?.(themeId);
   }
 
   // 現在の列状態を名前付きビューとして保存する。

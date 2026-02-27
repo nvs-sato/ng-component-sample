@@ -18,6 +18,24 @@
   border-top: 1px solid #e2e8f0;
 }
 
+.theme-list {
+  display: grid;
+  gap: 8px;
+}
+
+.theme-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.theme-item input {
+  margin: 0;
+}
+
 .block-title {
   margin: 0;
   font-size: 13px;

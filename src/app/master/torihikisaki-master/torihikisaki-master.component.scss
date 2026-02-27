@@ -1,0 +1,139 @@
+:host {
+  display: block;
+}
+
+/* 取引先マスタ画面専用のレイアウトと配色をこのコンポーネント内へ閉じ込める。 */
+.torihikisaki-master-gamen {
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top right, rgb(59 130 246 / 0.12), transparent 28%),
+    linear-gradient(180deg, #f6f8fc 0%, #eef3f8 100%);
+  color: #1e293b;
+}
+
+.gamen-header {
+  max-width: 1480px;
+  margin: 0 auto 18px;
+}
+
+.gamen-header h1,
+.grid-header h2 {
+  margin: 0;
+  font-weight: 800;
+}
+
+.gamen-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.kensaku-card,
+.grid-card {
+  max-width: 1480px;
+  margin: 0 auto;
+  border: 1px solid #d9e2ec;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 0.92);
+  box-shadow: 0 16px 40px rgb(15 23 42 / 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.kensaku-card {
+  padding: 20px 22px;
+}
+
+.kensaku-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.field-block {
+  display: grid;
+  gap: 8px;
+}
+
+.field-block span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.field-block input {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font: inherit;
+  color: #0f172a;
+  background: #fff;
+}
+
+.field-block input:focus {
+  outline: 2px solid rgb(37 99 235 / 0.15);
+  border-color: #60a5fa;
+}
+
+.button-area {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kensaku-button {
+  min-width: 120px;
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.grid-card {
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+.grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.grid-header span {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.torihikisaki-grid {
+  width: 100%;
+  height: 560px;
+}
+
+@media (max-width: 768px) {
+  .torihikisaki-master-gamen {
+    padding: 16px;
+  }
+
+  .kensaku-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-area,
+  .kensaku-button {
+    width: 100%;
+  }
+
+  .torihikisaki-grid {
+    height: 500px;
+  }
+}

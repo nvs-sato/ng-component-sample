@@ -1,229 +1,255 @@
-﻿<section class="register-page jp-order-register">
-  <header class="top-actions">
-    <div class="pager-area">
-      <div class="pager-mini">
-        <button type="button" class="btn btn-xs btn-ghost">&lt;&lt;</button>
-        <button type="button" class="btn btn-xs btn-ghost">&lt;</button>
-        <span>0/0</span>
-        <button type="button" class="btn btn-xs btn-ghost">&gt;</button>
-        <button type="button" class="btn btn-xs btn-ghost">&gt;&gt;</button>
+<section class="jyucyu-register-gamen">
+  <header class="page-header">
+    <div class="title-area">
+      <div class="title-icon" aria-hidden="true"></div>
+      <div class="title-block">
+        <h1>受注管理 <span>/ Order Management</span></h1>
+        <nav class="breadcrumb" aria-label="パンくず">
+          <span>ホーム</span>
+          <span>/</span>
+          <span>受注</span>
+          <span>/</span>
+          <strong>編集 (Edit)</strong>
+        </nav>
       </div>
-      <button type="button" class="btn btn-sm nyuryoku-btn">⚙入力設定</button>
     </div>
 
-    <div class="top-primary-actions">
-      <button type="button" class="btn btn-sm primary-btn">登録(S)</button>
-      <div class="dropdown dropdown-end">
-        <button type="button" tabindex="0" class="btn btn-sm primary-btn">帳票発行 ▼</button>
-        <ul tabindex="0" class="dropdown-content z-[2] menu p-2 shadow bg-base-100 rounded-box w-44">
-          <li><a>見積書</a></li>
-          <li><a>納品書</a></li>
-          <li><a>請求書</a></li>
-        </ul>
-      </div>
+    <div class="header-actions">
+      <button type="button" class="header-btn neutral-btn">
+        <span class="btn-icon">⎙</span>
+        帳票発行 (P)
+      </button>
+      <button type="button" class="header-btn primary-btn">登録 (S)</button>
     </div>
   </header>
 
+  <section class="control-panel card-panel">
+    <div class="page-move">
+      <button type="button" class="icon-btn">«</button>
+      <button type="button" class="icon-btn">‹</button>
+      <div class="page-indicator">
+        <span>0</span>
+        <span>/</span>
+        <span>0</span>
+      </div>
+      <button type="button" class="icon-btn">›</button>
+      <button type="button" class="icon-btn">»</button>
+    </div>
+
+    <button type="button" class="setting-btn">入力設定</button>
+  </section>
+
   <section class="form-grid">
-    <div class="left-col">
-      <div class="section-box form-block">
-        <div class="field-row">
-          <label>受注日</label>
-          <input type="date" class="input input-sm input-bordered" value="2026-02-25" />
-          <button type="button" class="btn btn-sm btn-square">▼</button>
+    <div class="card-panel main-form">
+      <div class="main-form-grid">
+        <div class="field-block">
+          <label>受注日 <span class="required">必須</span></label>
+          <div class="field-input has-icon">
+            <input type="date" value="2026-02-25" />
+            <span class="field-icon">🗓</span>
+          </div>
         </div>
-        <div class="field-row">
-          <label>得意先</label>
-          <input type="text" class="input input-sm input-bordered short" />
-          <button type="button" class="btn btn-sm btn-square">🔍</button>
-        </div>
-        <div class="field-row">
-          <label></label>
-          <input type="text" class="input input-sm input-bordered grow" placeholder="得意先名" />
-        </div>
-        <div class="field-row">
+
+        <div class="field-block">
           <label>受注番号</label>
-          <input type="text" class="input input-sm input-bordered short" />
-          <button type="button" class="btn btn-sm btn-circle">?</button>
-          <button type="button" class="btn btn-sm saiban-btn">採番</button>
+          <div class="split-action">
+            <input type="text" value="自動採番" />
+            <button type="button" class="sub-btn">採番</button>
+          </div>
         </div>
-      </div>
 
-      <div class="section-box form-block">
-        <div class="field-row">
+        <div class="field-block field-block-wide">
+          <label>得意先 <span class="sub-label">CUSTOMER INFO</span></label>
+          <div class="customer-line">
+            <div class="field-input with-search">
+              <input type="text" placeholder="得意先コード / 名称検索" />
+              <button type="button" class="search-btn">⌕</button>
+            </div>
+            <input type="text" placeholder="得意先名（表示のみ）" />
+          </div>
+        </div>
+
+        <div class="field-block field-block-full">
           <label>出荷先</label>
-          <input type="text" class="input input-sm input-bordered grow" />
-          <button type="button" class="btn btn-sm btn-square">🔍</button>
+          <div class="field-input with-search">
+            <input type="text" placeholder="出荷先を入力または検索" />
+            <button type="button" class="search-btn">⌕</button>
+          </div>
         </div>
-        <div class="field-row">
-          <label>得意先注文番号</label>
-          <input type="text" class="input input-sm input-bordered grow" placeholder="得意先注文番号" />
-        </div>
-      </div>
 
-      <div class="section-box form-block">
-        <div class="field-row">
-          <label>摘要</label>
-          <input type="text" class="input input-sm input-bordered grow" />
-          <button type="button" class="btn btn-sm btn-square">🔍</button>
+        <div class="field-block field-block-full">
+          <label>摘要（メモ）</label>
+          <textarea rows="3" placeholder="注文に関する連絡事項など"></textarea>
         </div>
       </div>
     </div>
 
-    <div class="right-col section-box form-block">
-      <div class="dual-row">
-        <div class="field-row compact">
-          <label>部門</label>
-          <input type="text" class="input input-sm input-bordered" />
-          <button type="button" class="btn btn-sm btn-square">🔍</button>
-        </div>
-        <div class="field-row compact">
-          <label>担当者</label>
-          <input type="text" class="input input-sm input-bordered" />
-          <button type="button" class="btn btn-sm btn-square">🔍</button>
+    <aside class="card-panel side-form">
+      <div class="field-block">
+        <label>部門</label>
+        <div class="field-input with-search">
+          <input type="text" placeholder="部門を選択" />
+          <button type="button" class="search-btn">⌕</button>
         </div>
       </div>
 
-      <div class="field-row">
+      <div class="field-block">
+        <label>担当者</label>
+        <div class="field-input with-search">
+          <input type="text" placeholder="担当者を選択" />
+          <button type="button" class="search-btn">⌕</button>
+        </div>
+      </div>
+
+      <div class="field-block">
         <label>見積番号</label>
-        <input type="text" class="input input-sm input-bordered short" />
-        <button type="button" class="btn btn-sm btn-square">🔍</button>
-        <button type="button" class="btn btn-sm mitumori-btn">見積情報を表示</button>
+        <div class="field-input with-search">
+          <input type="text" placeholder="見積参照" />
+          <button type="button" class="search-btn">⌕</button>
+        </div>
       </div>
 
-      <div class="field-row">
+      <div class="field-block">
         <label>取引形態</label>
-        <select class="select select-sm select-bordered short">
+        <select>
           <option>掛売上</option>
           <option>都度請求</option>
           <option>現金売上</option>
         </select>
       </div>
-    </div>
+    </aside>
   </section>
 
-  <section class="section-box detail-section">
-    <div class="detail-header">受注明細</div>
+  <section class="card-panel meisa-grid-panel">
+    <div class="meisai-header">
+      <h2>受注明細 <span>Order Line Items</span></h2>
+      <button type="button" class="add-meisai-btn" (click)="addDetailRow()">＋ 明細行を追加</button>
+    </div>
 
-    <div class="table-wrap">
-      <table class="detail-table">
+    <div class="meisai-table-wrap">
+      <table class="meisai-table">
         <thead>
           <tr>
-            <th rowspan="2" class="thin">#</th>
-            <th colspan="1">区分/状況</th>
-            <th colspan="1">商品コード/商品名</th>
-            <th colspan="1">入数 × セット × ケース</th>
-            <th colspan="1">数量/単位</th>
-            <th rowspan="2" class="thin">在</th>
-            <th colspan="1">単価/原単価</th>
-            <th colspan="1">金額/消費税/税率</th>
-            <th colspan="1" class="wide">備考/出荷予定倉庫/希望納期・出荷予定日</th>
-          </tr>
-          <tr>
-            <th>区分<br />状況</th>
-            <th>商品コード<br />商品名</th>
-            <th>入数・セット・ケース</th>
-            <th>数量・単位</th>
-            <th>単価・原単価</th>
-            <th>金額・消費税・税率</th>
-            <th>備考・倉庫・納期</th>
+            <th class="col-no">#</th>
+            <th class="col-kubun">区分 / 状況</th>
+            <th class="col-syohin">商品コード / 商品名</th>
+            <th class="col-suryo">数量 / 単位</th>
+            <th class="col-tanka">単価 / 原単価</th>
+            <th class="col-kingaku">金額 / 消費税</th>
+            <th class="col-bikou">備考 / 出荷倉庫</th>
+            <th class="col-delete"></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of detailRows">
-            <td class="row-no">
-              <span class="fixed-pill">定</span>
-              {{ row.rowNo }}
+            <td class="row-no-cell">
+              <span class="row-no-badge">{{ row.rowNo }}</span>
             </td>
+
             <td>
-              <input class="input input-xs input-bordered" [(ngModel)]="row.kubun" />
-              <input class="input input-xs input-bordered" [(ngModel)]="row.jyokyo" />
-            </td>
-            <td>
-              <div class="inline-with-btn">
-                <input class="input input-xs input-bordered" [(ngModel)]="row.syohinCd" />
-                <button type="button" class="btn btn-xs btn-square">🔍</button>
-              </div>
-              <input class="input input-xs input-bordered" [(ngModel)]="row.syohinMei" />
-            </td>
-            <td>
-              <div class="triple-inline">
-                <input class="input input-xs input-bordered" [(ngModel)]="row.irisu" />
-                <input class="input input-xs input-bordered" [(ngModel)]="row.setto" />
-                <input class="input input-xs input-bordered" [(ngModel)]="row.caseSu" />
+              <div class="cell-stack">
+                <select [(ngModel)]="row.kubun">
+                  <option value="1:売上">1:売上</option>
+                  <option value="2:値引">2:値引</option>
+                  <option value="3:送料">3:送料</option>
+                </select>
+                <select [(ngModel)]="row.jyokyo">
+                  <option value="出荷">出荷</option>
+                  <option value="未出荷">未出荷</option>
+                </select>
               </div>
             </td>
+
             <td>
-              <div class="inline-with-unit">
-                <input class="input input-xs input-bordered" [(ngModel)]="row.suryo" />
-                <span class="unit-text">{{ row.tani }}</span>
+              <div class="cell-stack">
+                <div class="field-input with-search table-search">
+                  <input [(ngModel)]="row.syohinCd" type="text" placeholder="商品コード" />
+                  <button type="button" class="search-btn">⌕</button>
+                </div>
+                <textarea [(ngModel)]="row.syohinMei" rows="2" placeholder="商品名"></textarea>
               </div>
             </td>
+
             <td>
-              <input class="input input-xs input-bordered" [(ngModel)]="row.zai" />
-            </td>
-            <td>
-              <input class="input input-xs input-bordered" [(ngModel)]="row.tanka" />
-              <div class="inline-with-btn">
-                <input class="input input-xs input-bordered" [(ngModel)]="row.gentanka" />
-                <button type="button" class="btn btn-xs btn-square">↻</button>
+              <div class="cell-stack">
+                <input [(ngModel)]="row.suryo" type="number" placeholder="数量" />
+                <input [(ngModel)]="row.tani" type="text" placeholder="単位" />
               </div>
             </td>
+
             <td>
-              <input class="input input-xs input-bordered bg-gray-100" [value]="row.kingaku" readonly />
-              <input class="input input-xs input-bordered bg-gray-100" [value]="row.syohizei" readonly />
-              <div class="inline-with-unit">
-                <select class="select select-xs select-bordered">
+              <div class="cell-stack">
+                <input [(ngModel)]="row.tanka" type="number" placeholder="0" />
+                <div class="inline-caption">
+                  <span>原</span>
+                  <input [(ngModel)]="row.gentanka" type="number" placeholder="0" />
+                </div>
+              </div>
+            </td>
+
+            <td class="money-cell">
+              <strong>{{ row.kingaku | number: '1.0-0' }}</strong>
+              <div class="tax-row">
+                <select>
                   <option>課税</option>
                   <option>軽減</option>
                 </select>
-                <input class="input input-xs input-bordered" [(ngModel)]="row.zeiritsu" />
+                <div class="rate-input">
+                  <input [(ngModel)]="row.zeiritsu" type="number" />
+                  <span>%</span>
+                </div>
+              </div>
+              <small>税額: {{ row.syohizei | number: '1.0-0' }}</small>
+            </td>
+
+            <td>
+              <div class="cell-stack">
+                <input [(ngModel)]="row.bikou" type="text" placeholder="備考" />
+                <select [(ngModel)]="row.syukkaYoteiSoko">
+                  <option>本社倉庫</option>
+                  <option>東日本倉庫</option>
+                  <option>西日本倉庫</option>
+                </select>
               </div>
             </td>
-            <td>
-              <div class="inline-with-btn">
-                <input class="input input-xs input-bordered" [(ngModel)]="row.bikou" />
-                <button type="button" class="btn btn-xs btn-square">🔍</button>
-              </div>
-              <select class="select select-xs select-bordered" [(ngModel)]="row.syukkaYoteiSoko">
-                <option>本社倉庫</option>
-                <option>東日本倉庫</option>
-                <option>西日本倉庫</option>
-              </select>
-              <div class="double-date">
-                <input type="date" class="input input-xs input-bordered" [(ngModel)]="row.kibouNouki" />
-                <input type="date" class="input input-xs input-bordered" [(ngModel)]="row.syukkaYoteibi" />
-              </div>
+
+            <td class="delete-cell">
+              <button type="button" class="delete-btn" (click)="removeDetailRow(row.rowNo)" [disabled]="detailRows.length === 1">
+                🗑
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <div class="detail-footer-left">
-      <button type="button" class="btn btn-sm add-row-btn" (click)="addDetailRow()">明細行を追加</button>
-    </div>
   </section>
 
-  <section class="summary-and-actions">
-    <div class="summary-bar section-box">
-      <div class="item"><span>粗利益</span><strong>0</strong></div>
-      <div class="item"><span>粗利益率</span><strong>0.0%</strong></div>
-      <div class="item"><span>明細計</span><strong>0</strong></div>
-      <div class="item"><span>消費税計</span><strong>0</strong></div>
-      <div class="item tax-item">
-        <span>消費税区分</span>
-        <button type="button" class="btn btn-xs">設定</button>
-        <strong>一括</strong>
+  <footer class="summary-footer card-panel">
+    <div class="summary-metrics">
+      <div class="metric-box">
+        <span>粗利益 (PROFIT)</span>
+        <strong>¥ 0</strong>
       </div>
-      <div class="item currency"><span>JPY</span></div>
-      <div class="item total"><span>合計</span><strong>0</strong></div>
+      <div class="metric-box accent-box">
+        <span>粗利益率 (%)</span>
+        <strong>0.0%</strong>
+      </div>
+      <div class="metric-box">
+        <span>明細合計</span>
+        <strong>0</strong>
+      </div>
+      <div class="metric-box">
+        <span>消費税合計 (TAX)</span>
+        <strong>¥ 0</strong>
+      </div>
     </div>
 
-    <div class="bottom-primary-actions">
-      <button type="button" class="btn btn-success primary-btn">登録</button>
-      <button type="button" class="btn btn-success primary-btn">帳票発行 ▼</button>
+    <div class="summary-total">
+      <div class="total-text">
+        <span>受注合計金額 (TOTAL)</span>
+        <strong>¥ 0</strong>
+      </div>
+      <button type="button" class="confirm-btn">受注を確定する</button>
     </div>
-  </section>
+  </footer>
 </section>
-

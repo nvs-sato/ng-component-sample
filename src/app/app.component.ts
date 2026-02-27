@@ -38,9 +38,11 @@ export class AppComponent implements OnInit, OnDestroy {
     const items: BreadcrumbItem[] = [{ label: 'ホーム', url: '/' }];
     const labels: Record<string, string> = {
       jyucyu: '受注',
+      master: 'マスタ',
       list: '受注一覧',
       register: '受注登録',
       ikkatsu: '受注一括登録',
+      torihikisaki: '取引先マスタ',
       component: 'コンポーネント',
       'date-input': '日付入力',
       'year-month-input': '年月入力',

@@ -23,6 +23,8 @@ import {
 import { AG_GRID_LOCALE_JA_JP } from '../../ag-grid-locale-ja';
 import { JyucyuViewToolPanelComponent } from './jyucyu-view-tool-panel.component';
 
+type HyojiThemeId = 'compact' | 'modern' | 'classic-like';
+
 @Component({
   selector: 'app-jyucyu-list',
   templateUrl: './jyucyu-list.component.html',
@@ -38,6 +40,7 @@ export class JyucyuListComponent implements OnInit {
   private gridApi: GridApi<SalesRow> | null = null;
   private selectionMode: 'range' | 'row' = 'range';
   private hasRestoredListState = false;
+  private hyojiThemeId: HyojiThemeId = 'compact';
 
   constructor(private readonly router: Router) {}
 
@@ -49,6 +52,8 @@ export class JyucyuListComponent implements OnInit {
       width: 40,
       maxWidth: 40,
       lockPosition: true,
+      suppressMovable: true,
+      lockVisible: true,
       pinned: 'left',
     },
     {
@@ -161,7 +166,11 @@ export class JyucyuListComponent implements OnInit {
         labelDefault: 'ビュー',
         labelKey: 'view',
         iconKey: 'menu',
-        toolPanel: JyucyuViewToolPanelComponent
+        toolPanel: JyucyuViewToolPanelComponent,
+        toolPanelParams: {
+          getHyojiThemeId: () => this.hyojiThemeId,
+          onChangeHyojiTheme: (themeId: HyojiThemeId) => this.changeHyojiTheme(themeId)
+        }
       },
       {
         id: 'columns',
@@ -263,6 +272,19 @@ export class JyucyuListComponent implements OnInit {
   // 現在の選択モードに応じて行選択を切り替える
   get rowSelection(): 'multiple' | undefined {
     return this.selectionMode === 'row' ? 'multiple' : undefined;
+  }
+
+  // 表示テーマの選択結果をグリッドのclassへ反映する。
+  get gridThemeClass(): string {
+    switch (this.hyojiThemeId) {
+      case 'modern':
+        return 'ag-theme-alpine grid';
+      case 'classic-like':
+        return 'ag-theme-alpine ag-theme-likewijmo grid';
+      case 'compact':
+      default:
+        return 'ag-theme-balham grid';
+    }
   }
 
   async ngOnInit(): Promise<void> {
@@ -464,6 +486,11 @@ export class JyucyuListComponent implements OnInit {
     this.gridApi.deselectAll();
     (this.gridApi as unknown as { clearRangeSelection?: () => void }).clearRangeSelection?.();
     this.selectedRowCount = 0;
+  }
+
+  // サイドパネルから受け取った表示テーマを保持する。
+  private changeHyojiTheme(themeId: HyojiThemeId): void {
+    this.hyojiThemeId = themeId;
   }
 
   private dateFormatter(params: { value: string | null | undefined }): string {

@@ -11,6 +11,7 @@ import { JyucyuIkkatsuComponent } from './jyucyu/jyucyu-ikkatsu/jyucyu-ikkatsu.c
 import { JyucyuListComponent } from './jyucyu/jyucyu-list/jyucyu-list.component';
 import { JyucyuViewToolPanelComponent } from './jyucyu/jyucyu-list/jyucyu-view-tool-panel.component';
 import { JyucyuRegisterComponent } from './jyucyu/jyucyu-register/jyucyu-register.component';
+import { TorihikisakiMasterComponent } from './master/torihikisaki-master/torihikisaki-master.component';
 import { NvsInputDateComponent } from './shared/nvs-input-date/nvs-input-date.component';
 import { NvsPopupHostComponent } from './shared/nvs-popup/nvs-popup-host/nvs-popup-host.component';
 import { NvsInputYearMonthComponent } from './shared/nvs-input-year-month/nvs-input-year-month.component';
@@ -26,6 +27,7 @@ import { TorihikisakiPopupComponent } from './shared/torihikisaki-popup/torihiki
     JyucyuViewToolPanelComponent,
     JyucyuRegisterComponent,
     JyucyuIkkatsuComponent,
+    TorihikisakiMasterComponent,
     NvsInputDateComponent,
     NvsInputYearMonthComponent,
     NvsPopupHostComponent,

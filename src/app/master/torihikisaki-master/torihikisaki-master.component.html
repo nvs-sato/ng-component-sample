@@ -1,0 +1,45 @@
+<div class="torihikisaki-master-gamen">
+  <header class="gamen-header">
+    <div>
+      <h1>取引先マスタ</h1>
+      <p>キーワードで取引先を検索し、得意先/仕入先の情報を一覧表示します。</p>
+    </div>
+  </header>
+
+  <section class="kensaku-card">
+    <div class="kensaku-grid">
+      <label class="field-block" for="keyword">
+        <span>キーワード</span>
+        <input
+          id="keyword"
+          type="text"
+          [(ngModel)]="kensakuKeyword"
+          (keyup.enter)="onKensaku()"
+          placeholder="取引先コード、取引先名、タグなどで検索"
+        />
+      </label>
+
+      <div class="button-area">
+        <button type="button" class="kensaku-button" (click)="onKensaku()">検索</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-card">
+    <div class="grid-header">
+      <h2>検索結果</h2>
+      <span>{{ hyojiKensu }}件</span>
+    </div>
+
+    <ag-grid-angular
+      class="ag-theme-alpine torihikisaki-grid"
+      [columnDefs]="columnDefs"
+      [rowData]="torihikisakiList"
+      [defaultColDef]="defaultColDef"
+      [localeText]="localeText"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      (modelUpdated)="onModelUpdated($event)"
+    ></ag-grid-angular>
+  </section>
+</div>
